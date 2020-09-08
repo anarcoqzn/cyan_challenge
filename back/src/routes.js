@@ -8,20 +8,20 @@ const UserController = require('./controllers/UserController');
 
 routes = express.Router();
 
-routes.post("/:harvestCode/:farmCode/field", FieldController.register);
-routes.get("/field", FieldController.show);
-
-routes.post("/:millName/:harvestCode/farm", FarmController.register);
-routes.get("/farm", FarmController.show);
-
-routes.post("/:millName/harvest", HarvestController.register);
-routes.get("/harvest", HarvestController.show);
-
-routes.post("/:userCpf/mill", MillController.register);
-routes.get("/mill", MillController.show);
-
 routes.post("/user", UserController.register);
 routes.get("/user", UserController.show);
+
+routes.get("/mill", MillController.show);
+routes.post("/mill", MillController.register);
+
+routes.get("/:millName/harvest", HarvestController.show);
+routes.post("/:millName/harvest", HarvestController.register);
+
+routes.get("/:harvestCode/farm", FarmController.show);
+routes.post("/:harvestCode/farm", FarmController.register);
+
+routes.post("/:farmCode/field", FieldController.register);
+routes.get("/:farmCode/field", FieldController.show);
 
 routes.get("/", function(req, res) {
     res.sendFile(path.join(__dirname + '/../public/index.html'));
@@ -30,7 +30,5 @@ routes.get("/", function(req, res) {
 routes.get("/dist/bundle.js", function(req, res) {
     res.sendFile(path.join(__dirname + '/../public/dist/bundle.js'));
 });
-
-
 
 module.exports = routes;

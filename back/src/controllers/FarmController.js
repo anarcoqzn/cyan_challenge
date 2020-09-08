@@ -11,6 +11,9 @@ module.exports = {
     },
 
     async show(req, res){
-        return res.json(await Farm.findAll({include:{association:'harvest'}}));
+        const {harvestCode} = req.params;
+        return res.json(await Farm.findAll({
+            where:{harvestCode:harvestCode},
+            include:{association:'harvest'}}));
     }
 }

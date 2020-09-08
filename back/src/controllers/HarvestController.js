@@ -10,6 +10,9 @@ module.exports = {
     },
 
     async show(req, res){
-        return res.json(await Harvest.findAll({include:{association:'mill'}}));
+        const {userCPf, millName} = req.params;
+        return res.json(await Harvest.findAll({
+            where:{millName:millName},
+            include:{association:'mill'}}));
     }
 }
