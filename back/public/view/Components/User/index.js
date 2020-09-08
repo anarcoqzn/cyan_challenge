@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import MillEl from '../Mill';
 
 export default class User extends Component{
     constructor(props){
@@ -9,18 +10,22 @@ export default class User extends Component{
             mills:[]
         }
     }
+
     componentDidMount(){
-        axios.get('http://localhost:3333/mill')
+        axios.get("http://localhost:3333/api/mill")
         .then(res => {
             const mills = res.data;
-            console.log(mills)
-            this.setState({mills})
+            this.setState({mills});
+            console.log(this.state.mills)
         })
+
     }
 
     render(){
-        return <div>
-            {this.state.mills.map(mill => <li>{mill.name}</li>)}
-        </div>
+        return (
+            <ul>
+              { this.state.mills.map(mill => <MillEl key={mill.name} {...mill}/>)}
+            </ul>
+        )
     }
 }

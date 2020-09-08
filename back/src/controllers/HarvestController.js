@@ -1,4 +1,5 @@
-const Harvest = require("../models/Harvest")
+const Harvest = require("../models/Harvest");
+const { show } = require("./FieldController");
 module.exports = {
     async register(req, res){
         const{millName} = req.params;
@@ -9,10 +10,15 @@ module.exports = {
         return res.json(harvest);
     },
 
-    async show(req, res){
-        const {userCPf, millName} = req.params;
+    async getHarvestsFromMill(req, res){
+        console.log(req.query)
+        const {millName} = req.query;
         return res.json(await Harvest.findAll({
             where:{millName:millName},
             include:{association:'mill'}}));
+    },
+
+    async show(req,res){
+        return res.json(await Harvest.findAll({include:{association:'mill'}}));
     }
 }

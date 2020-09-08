@@ -14,7 +14,7 @@ class Harvest extends Model{
 
     static associate(models){
         this.belongsTo(models.Mill, {
-            foreignKey:'millName',
+            foreignKey:'millId',
             as:'mill'
         });
 

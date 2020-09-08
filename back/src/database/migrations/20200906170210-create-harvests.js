@@ -16,10 +16,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
-      millName:{
-        type: Sequelize.STRING,
+      millId:{
+        type: Sequelize.INTEGER,
         allowNull: false,
-        references:{ model: 'Mills', key:'name'},
+        references:{ model: 'Mills', key:'id'},
         onUpdate:'CASCADE',
         onDelete:'CASCADE'
       },

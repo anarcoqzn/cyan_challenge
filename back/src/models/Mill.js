@@ -3,7 +3,7 @@ const {Model, DataTypes} = require('sequelize');
 class Mill extends Model{
     static init(connection){
         super.init({
-            name: {type: DataTypes.STRING, primaryKey: true}
+            name: {type: DataTypes.STRING}
         },
         {
             sequelize : connection
@@ -17,7 +17,7 @@ class Mill extends Model{
         });
 
         this.hasMany(models.Harvest,{
-            foreignKey:"millName",
+            foreignKey:"millId",
             as:"harvests"
         })
     }

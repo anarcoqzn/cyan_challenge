@@ -1,4 +1,5 @@
 const Farm = require('../models/Farm');
+const { show } = require('./FieldController');
 
 module.exports = {
     async register(req, res){
@@ -10,10 +11,13 @@ module.exports = {
         return res.json(farm);
     },
 
-    async show(req, res){
+    async getFarmsFromHarvest(req, res){
         const {harvestCode} = req.params;
         return res.json(await Farm.findAll({
             where:{harvestCode:harvestCode},
             include:{association:'harvest'}}));
+    },
+    async show(req,res){
+        return res.json(await Farm.findAll({include:{association:'harvest'}}));
     }
 }
