@@ -2,8 +2,8 @@ const Mill = require('../models/Mill');
 
 module.exports = {
     async register(req, res){
+        console.log(req.body)
         const { userCpf,name } = req.body;
-
         const mill = await Mill.create({"name":name, "userCpf":userCpf});
 
         return res.json(mill);
