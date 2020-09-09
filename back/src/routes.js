@@ -4,7 +4,6 @@ const FarmController = require('./controllers/FarmController');
 const HarvestController = require('./controllers/HarvestController');
 const MillController = require('./controllers/MillController');
 const UserController = require('./controllers/UserController');
-const { Router } = require('express');
 
 routes = express.Router();
 
@@ -12,10 +11,11 @@ routes.post("/user", UserController.register);
 routes.get("/user", UserController.show);
 
 routes.get("/mill", MillController.show);
-routes.get("/mill/:millName", MillController.findMillByName)
+routes.get("/mill/:id", MillController.findById);
+routes.get("/mill/:millName", MillController.findMillByName);
 routes.post("/mill", MillController.register);
 
-routes.get("/mill/:millName/harvest", HarvestController.getHarvestsFromMill);
+//routes.get("/harvest", HarvestController.getHarvestsFromMill);
 routes.get("/harvest", HarvestController.show)
 routes.get("/farm/:harvest",FarmController.getFarmsFromHarvest)
 routes.post("/harvest", HarvestController.register);
