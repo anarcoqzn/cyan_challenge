@@ -1,31 +1,38 @@
 import React, {Component} from 'react';
-import axios from 'axios';
-import MillEl from '../Mill';
+import api from '../../../services/api'
+import {Link} from 'react-router-dom';
+
+import "./styles.css";
 
 export default class User extends Component{
     constructor(props){
         super(props);
-
+        
         this.state = {
             mills:[]
         }
     }
 
     componentDidMount(){
-        axios.get("http://localhost:3333/api/mill")
+        api.get("http://localhost:3333/api/mill")
         .then(res => {
             const mills = res.data;
             this.setState({mills});
-            console.log(this.state.mills)
         })
-
     }
 
     render(){
+        const mills = this.state.mills;
         return (
-            <ul>
-              { this.state.mills.map(mill => <MillEl key={mill.name} {...mill}/>)}
-            </ul>
+            <div className = "list">
+                {mills.map(mill =>
+                <div key={mill.id}>
+                    <article><strong>{mill.name}</strong>
+                        <p>Created by: {mill.owner.name}</p>
+                        <Link to={`/mill/${mill.id}`}>Acessar</Link>
+                    </article>
+                </div>)}
+            </div>
         )
     }
 }
