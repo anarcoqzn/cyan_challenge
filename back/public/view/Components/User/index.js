@@ -41,11 +41,12 @@ export default class User extends Component{
         }
         const headers = {
             'Content-Type': 'application/json'
-          }
+        }
         
         api.post("http://localhost:3333/api/mill", data,headers)
         .then(res => {
-            this.loadMills();
+            if(res.status == 200){this.loadMills();}
+            else{console.log(res)}
         })
     }
 
@@ -63,15 +64,13 @@ export default class User extends Component{
                     </div>)}
                 </div>
                 <div className="create-new-mill">
-                    
-                        <Input
-                            onChange={this.handleNameChange}
-                            placeholder="Mill Name"
-                            type="text"
-                            required
-                        />
-                        <Button onClick={this.handleSubmitMill} outline color="primary">Criar</Button>{' '}
-                    
+                    <Input
+                        onChange={this.handleNameChange}
+                        placeholder="Mill Name"
+                        type="text"
+                        required
+                    />
+                    <Button onClick={this.handleSubmitMill} outline color="primary">Criar</Button>{' '}
                 </div>
             </div>
         )

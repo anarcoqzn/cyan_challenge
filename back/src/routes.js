@@ -15,9 +15,8 @@ routes.get("/mill/:id", MillController.findById);
 routes.get("/mill/:millName", MillController.findMillByName);
 routes.post("/mill", MillController.register);
 
-//routes.get("/harvest", HarvestController.getHarvestsFromMill);
 routes.get("/harvest", HarvestController.show)
-routes.get("/farm/:harvest",FarmController.getFarmsFromHarvest)
+routes.get("/harvest/:id",FarmController.getFarmsFromHarvest)
 routes.post("/harvest", HarvestController.register);
 
 routes.get("/:harvestCode/farm", FarmController.show);

@@ -12,9 +12,10 @@ module.exports = {
     },
 
     async getFarmsFromHarvest(req, res){
-        const {harvestCode} = req.params;
+        const {id} = req.params;
+        console.log(req)
         return res.json(await Farm.findAll({
-            where:{harvestCode:harvestCode},
+            where:{harvestCode:id},
             include:{association:'harvest'}}));
     },
     async show(req,res){

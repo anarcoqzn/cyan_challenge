@@ -5,6 +5,7 @@ import {BrowserRouter,Route, Switch} from 'react-router-dom';
 
 import Home from './Components/Home';
 import Header from './Components/Header';
+import Harvest from './Components/Harvest';
 
 class App extends Component {
 
@@ -18,6 +19,7 @@ class App extends Component {
                             <Route exact path="/" component={Home}/>
                             <Route path="/user" component={User}/>
                             <Route path="/mill/:id" component={Mill}/>
+                            <Route path="/harvest/:id" component={Harvest}/>
                         </Switch>
                     </BrowserRouter>
                 </div>
