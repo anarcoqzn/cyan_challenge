@@ -15,12 +15,6 @@ module.exports = {
     async show(req, res){
         return res.json(await Mill.findAll({include:{association:'owner'}}));
     },
-    
-    async findMillByName(req, res){
-        const {millName} = req.params;
-
-        return res.json(await Mill.findOne({millName, include:{association:"harvests"}}))
-    },
 
     async findById(req, res){
         const {id} = req.params;

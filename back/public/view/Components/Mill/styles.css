@@ -1,7 +1,8 @@
 .list {
     max-width: 700px;
     margin:20px auto auto 0px;
-    padding: 0 20px
+    padding: 0 20px;
+    align-items: center;
 }
 
 .list .list2 {
@@ -40,6 +41,7 @@
     justify-content: center;
     align-items: center;
     transition: all 0.2s;
+    margin-bottom: 10px;
 }
 
 .list a:hover{

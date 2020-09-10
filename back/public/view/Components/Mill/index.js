@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import api from '../../../services/api';
 import DatePicker from "react-datepicker";
 import { Link } from 'react-router-dom';
-import{ Input, Button } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
+import { toast } from 'react-toastify';
 
  
 import "react-datepicker/dist/react-datepicker.css";
@@ -56,8 +57,11 @@ export default class Mill extends Component{
 
         api.post("http://localhost:3333/api/harvest", newHarvest, headers)
         .then(res=>{
-            if(res.status == 200){this.loadHarvests();}
-            else{console.log(res)}
+            toast.success(""+res.data)
+            this.loadHarvests();
+            }
+        ).catch(res,err=>{
+            toast.error(""+err.message+res.data)
         })
     }
 
@@ -87,26 +91,40 @@ export default class Mill extends Component{
                             <p><strong>Harvest Code:</strong> {h.code}</p>
                             <p><strong>Start:</strong> {h.start}</p>
                             <p><strong>End</strong>: {h.end}</p>
-                            <h5>Created by:</h5>
-                            <Link to={`/harvest/${h.code}`}>Acessar</Link>
+                            <p>Created by:</p>
+                            <Link to={`/harvest/${h.code}`}>Access</Link>
                         </div>
                         )}
                 </article>
+                
                 <div className="create-new-harvest">
-                    <Input
-                        onChange={this.handleCodeChange}
-                        placeholder="Insert a new code"
-                        type="number"
-                        required
-                    />
-                    <DatePicker
-                        selected={this.state.start}
-                        onChange={this.handleStartDateChange}
-                    /><DatePicker
-                        selected={this.state.end}
-                        onChange={this.handleEndDateChange}
-                    />
-                    <Button onClick={this.submitHarvest} outline color="primary">Criar</Button>{' '}
+                    <Form inline>
+                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                            <Label className="mr-sm-2">Code</Label>
+                            <Input
+                                onChange={this.handleCodeChange}
+                                type="number"  
+                                required
+                                valid={this.state.code > 0}
+                                value={this.state.code}
+                            />
+                        </FormGroup>
+                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                            <Label className="mr-sm-2">Start</Label>
+                            <DatePicker
+                                selected={this.state.start}
+                                onChange={this.handleStartDateChange}
+                            />
+                        </FormGroup>
+                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                            <Label className="mr-sm-2">End</Label>
+                            <DatePicker
+                                selected={this.state.end}
+                                onChange={this.handleEndDateChange}
+                            />
+                        </FormGroup>
+                        <Button onClick={this.submitHarvest} color="primary">Criar</Button>
+                    </Form>
                 </div>
             </div>
         )

@@ -12,17 +12,15 @@ routes.get("/user", UserController.show);
 
 routes.get("/mill", MillController.show);
 routes.get("/mill/:id", MillController.findById);
-routes.get("/mill/:millName", MillController.findMillByName);
 routes.post("/mill", MillController.register);
 
 routes.get("/harvest", HarvestController.show)
-routes.get("/harvest/:id",FarmController.getFarmsFromHarvest)
+routes.get("/harvest/:id",HarvestController.getHarvest)
 routes.post("/harvest", HarvestController.register);
 
-routes.get("/:harvestCode/farm", FarmController.show);
-routes.post("/:harvestCode/farm", FarmController.register);
+routes.post("/farm", FarmController.register);
+routes.get("/farm/:id", FarmController.findById);
 
-routes.post("/:farmCode/field", FieldController.register);
-routes.get("/:farmCode/field", FieldController.show);
+
 
 module.exports = routes;

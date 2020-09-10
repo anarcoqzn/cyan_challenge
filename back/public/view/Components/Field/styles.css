@@ -1,9 +1,17 @@
 .list {
-    max-width: 50px;
-    margin:20px auto auto 20px;
+    max-width: 700px;
+    margin:20px auto auto 0px;
     padding: 0 20px
 }
 
+.list .list2 {
+    max-width: 400px;
+    margin: 20px auto auto 0px;
+    padding: 0 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
 .list article{
     background: azure;
     border: 1px solid #DDD;
@@ -12,11 +20,11 @@
     margin-bottom: 20px;
 }
 
-.list p{
+.list .list2 p{
     font-size: 16px;
-    color: #999;
+    color: chocolate;
     margin-top: 5px;
-    line-height: 24px;
+    line-height: 8px;
 }
 
 .list a{

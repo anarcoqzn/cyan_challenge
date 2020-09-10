@@ -1,8 +1,9 @@
 const Field = require('../models/Field');
+
 module.exports = {
     async register(req, res){
-        const {farmCode} = req.params;
-        const {code} = req.body;
+        
+        const {farmCode, code} = req.body;
         const point = {type:'Point', coordinates:req.body.coordinates}
 
         const field = await Field.create({"code":code,"coordinates":point, "farmCode":farmCode});
@@ -11,10 +12,6 @@ module.exports = {
     },
 
     async show(req, res){
-        const {farmCode} = req.params;
-        return res.json(await Field.findAll({
-            where:{farmCode:farmCode},
-            include:{association:'farm'}
-        }));
+        return res.json(await Field.findAll({include:{association:'farm'}}));
     }
 }

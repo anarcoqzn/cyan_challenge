@@ -6,21 +6,21 @@ import {Link} from 'react-router-dom'
 
 import "./styles.css";
 
-export default class Harvest extends Component{
+export default class Farm extends Component{
     constructor(props){
         super(props);
 
         this.state = {
-            harvest:{},
-            farms:[],
-            code: 0,
-            name:""
+            farm:{},
+            fields:[],
+            code:0,
+            latitude:0, 
+            longitude:0
         }
 
-        this.loadHarvest = this.loadFarms.bind(this);
+        this.loadFields = this.loadFields.bind(this);
         this.handleCodeChange = this.handleCodeChange.bind(this);
-        this.handleNameChange = this.handleNameChange.bind(this);
-        this.submitFarm = this.submitFarm.bind(this);
+        this.submitField = this.submitField.bind(this);
         this.isSubmitEnabled = this.isSubmitEnabled.bind(this);
     }
 
@@ -28,11 +28,16 @@ export default class Harvest extends Component{
         this.setState({code:event.target.value});
     }
 
-    handleNameChange(event){
-        this.setState({name:event.target.value})
+    handleLatitudeChange(event){
+        this.setState({latitude:event.target.value})
     }
 
-    submitFarm(){
+    handleLongitudeChange(event){
+
+    }
+
+
+    submitField(){
         const newFarm={
             "harvestCode":this.state.harvest.code,
             "code": this.state.code,
@@ -43,29 +48,30 @@ export default class Harvest extends Component{
             'Content-Type': 'application/json'
         }
 
-        api.post("http://localhost:3333/api/farm", newFarm, headers)
+        api.post("http://localhost:3333/api/field", newFarm, headers)
         .then(res=>{
             toast.success(""+res.data)
-            this.loadFarms();
+            this.loadFields();
             }
         ).catch(err=>{
             toast.error(""+err.message)
         })
     }
 
-    loadFarms(){
+    loadFields(){
         const {id} = this.props.match.params;
-        api.get(`http://localhost:3333/api/harvest/${id}`)
+        api.get(`http://localhost:3333/api/farm/${id}`)
         .then(res =>{
-                const harvest = res.data;
-                this.setState({harvest})
-                this.setState({farms:res.data.farms})
+                const farm = res.data;
+                this.setState({farm})
+                this.setState({fields:res.data.fields})
+                console.log(res.data)
             }
         )
     }
 
     componentDidMount(){
-        this.loadFarms();
+        this.loadFields();
     }
 
     isSubmitEnabled() {
@@ -73,29 +79,28 @@ export default class Harvest extends Component{
     }
 
     render(){
-        const {harvest} = this.state;
-        const {farms} = this.state;
+        const {farm} = this.state;
+        const {fields} = this.state;
         return(
             <div className="list">
                 <article>
-                    <h1>Harvest Code: {harvest.code}</h1>
-                    {farms.map(farm =>
+                    <h1>Farm Name: {farm.name}</h1>
+                    {fields.map(field =>
                         <div className="list2" key={farm.code}>
-                            <p><strong>Farm name: {farm.name}</strong></p>
-                            <p><strong>Farm code: {farm.code}</strong></p>
+                            <p><strong>Field code: {field.code}</strong></p>
                             <p>Created at: {farm.createdAt}</p>
                             <Link to={`/farm/${farm.code}`}>Access</Link>
                         </div>
                     )}
                 </article>
 
-                <div className="create-new-farm">
+                <div className="create-new-field">
                 <Form inline>
                     <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                         <Input 
                             onChange={this.handleCodeChange}
                             type="number" 
-                            placeholder="Farm Code" 
+                            placeholder="Field Code" 
                             required
                             valid={this.state.code > 0}
                             value={this.state.code}
@@ -110,7 +115,7 @@ export default class Harvest extends Component{
                             value={this.state.name}
                         />
                     </FormGroup>
-                    <Button onClick={this.submitFarm} disabled={!this.isSubmitEnabled()}color="primary" >Criar</Button>
+                    <Button onClick={this.submitField} disabled={!this.isSubmitEnabled()}color="primary" >Criar</Button>
                 </Form>
                 </div>
             </div>
