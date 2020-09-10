@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import api from '../../../services/api'
+import Field from '../Field';
 
 
 export default class Sidebar extends Component{
@@ -59,7 +60,6 @@ export default class Sidebar extends Component{
                     <div key={farm.code}>{farm.name}</div>
                 )}
             </div>
-
         )
     }
 }
