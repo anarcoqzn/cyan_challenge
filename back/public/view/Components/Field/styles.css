@@ -46,3 +46,18 @@
     background: #da552f;
     color: white;
 }
+
+#mapid { 
+    height: 1000px;
+    width: 700px;
+    align-items: center;
+    display: block;
+    margin-top:20px;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.leaflet-container {
+    width: 100%;
+    height: 100vh;
+  }

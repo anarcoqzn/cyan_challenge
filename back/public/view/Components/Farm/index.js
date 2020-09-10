@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import api from '../../../services/api';
-import { Button, Form, FormGroup, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Label } from 'reactstrap';
 import { toast } from 'react-toastify';
 import {Link} from 'react-router-dom'
 
@@ -22,26 +22,32 @@ export default class Farm extends Component{
         this.handleCodeChange = this.handleCodeChange.bind(this);
         this.submitField = this.submitField.bind(this);
         this.isSubmitEnabled = this.isSubmitEnabled.bind(this);
+        this.handleLatitudeChange = this.handleLatitudeChange.bind(this);
+        this.handleLongitudeChange = this.handleLongitudeChange.bind(this);
     }
 
     handleCodeChange(event){
         this.setState({code:event.target.value});
+        
     }
 
     handleLatitudeChange(event){
         this.setState({latitude:event.target.value})
+        
     }
 
     handleLongitudeChange(event){
-
+        this.setState({longitude:event.target.value})
+        
     }
 
 
     submitField(){
+        
         const newFarm={
-            "harvestCode":this.state.harvest.code,
+            "farmCode":this.state.farm.code,
             "code": this.state.code,
-            "name": this.state.name
+            "coordinates":[this.state.latitude, this.state.longitude]
         }
 
         const headers = {
@@ -65,7 +71,6 @@ export default class Farm extends Component{
                 const farm = res.data;
                 this.setState({farm})
                 this.setState({fields:res.data.fields})
-                console.log(res.data)
             }
         )
     }
@@ -75,7 +80,7 @@ export default class Farm extends Component{
     }
 
     isSubmitEnabled() {
-        return (this.state.code > 0 && this.state.name != "");
+        return (this.state.code > 0 && this.state.latitude != 0 && this.state.longitude != 0);
     }
 
     render(){
@@ -88,8 +93,8 @@ export default class Farm extends Component{
                     {fields.map(field =>
                         <div className="list2" key={farm.code}>
                             <p><strong>Field code: {field.code}</strong></p>
-                            <p>Created at: {farm.createdAt}</p>
-                            <Link to={`/farm/${farm.code}`}>Access</Link>
+                            <p>Created at: {field.createdAt}</p>
+                            <Link to={`/field/${field.code}`}>Access</Link>
                         </div>
                     )}
                 </article>
@@ -97,22 +102,29 @@ export default class Farm extends Component{
                 <div className="create-new-field">
                 <Form inline>
                     <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                        <Label className="mr-sm-2">Code</Label>
                         <Input 
                             onChange={this.handleCodeChange}
                             type="number" 
-                            placeholder="Field Code" 
                             required
                             valid={this.state.code > 0}
                             value={this.state.code}
                         />
-                    </FormGroup>
-                    <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                        <Label className="mr-sm-2">Latitude</Label>
                         <Input 
-                            onChange={this.handleNameChange}
-                            type="text" 
-                            placeholder="Farm Name" 
+                            onChange={this.handleLatitudeChange}
+                            type="number" 
                             required
-                            value={this.state.name}
+                            valid={this.state.latitude != 0}
+                            value={this.state.latitude}
+                        />
+                        <Label className="mr-sm-2">Longitude</Label>
+                        <Input 
+                            onChange={this.handleLongitudeChange}
+                            type="number" 
+                            required
+                            valid={this.state.longitude != 0}
+                            value={this.state.longitude}
                         />
                     </FormGroup>
                     <Button onClick={this.submitField} disabled={!this.isSubmitEnabled()}color="primary" >Criar</Button>
