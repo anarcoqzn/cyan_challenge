@@ -19,12 +19,12 @@ module.exports = {
         return res.json(await Field.findAll({include:{association:'farm'}}));
     },
 
-    async findById(req,res){
+    async findByCode(req,res){
         const{id} = req.params;
 
-        const field = await Field.findByPk(id);
+        const field = await Field.findByPk(id, {include:{association:'farm'}});
 
-        if(!field) return res.status(404).send("Field not found!");
+        if(!field) return res.json("Field with code "+id+" not found");
 
         return res.json(field);
     }

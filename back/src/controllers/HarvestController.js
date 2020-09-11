@@ -14,18 +14,25 @@ module.exports = {
     },
 
     async show(req,res){
-        
-        const millId = req.query.millId;
-        if (millId){
-            return res.json(await Harvest.findAll({where:{millId},include:{association:'mill'}}))
+        const { start, end } = req.query;
+
+        if(start && end) {
+            const harvests = await Harvest.findAll({where: {
+                start: {$gte:start},
+                end: {$lte:end}
+            }, include: {association:'farms'}});
+            if(!harvests) return res.json({error:"There is no harvest between these dates"})
+            else return res.json(harvests);
+
+        }else{
+            return res.json(await Harvest.findAll());
         }
-        return res.json(await Harvest.findAll());
     },
 
-    async getHarvest(req, res){
+    async findByCode(req, res){
         const{id} = req.params;
 
-        const harvest = await Harvest.findOne({where:{code:id}, include:{association:'farms'}})
+        const harvest = await Harvest.findByPk(id, {include:{association:'farms'}})
 
         return res.json(harvest)
     }

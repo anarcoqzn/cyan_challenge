@@ -68,13 +68,27 @@ export default class FieldMap extends Component{
                     fieldData={this.state.fieldModal.fieldData} 
                     isOpen={this.state.fieldModal.isOpen}/>
                     
-                <Map center={center} zoom={this.state.zoom} onClick={this.handleMapClick}>
+                <Map
+                    boundsOptions={{padding: [50, 50]}} 
+                    center={center} zoom={this.state.zoom} 
+                    onClick={this.handleMapClick}
+                    maxBoundsViscosity={1.0}
+                    >
+
                     <TileLayer
                     attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+
                     {this.props.fields.map(field =>
-                            <Marker key={field.code} icon ={myIcon} position={field.coordinates.coordinates}/>
+                            <Marker key={field.code} icon ={myIcon} position={field.coordinates.coordinates}>
+                                <Popup>
+                                    <span>Field Code: {field.code}</span>
+                                    <br/>
+                                    <span>Latitude: {field.coordinates.coordinates[0]}</span><br/>
+                                    <span>Longitude: {field.coordinates.coordinates[1]}</span><br/>
+                                </Popup>
+                            </Marker>
                         )
                     }
                 </Map>

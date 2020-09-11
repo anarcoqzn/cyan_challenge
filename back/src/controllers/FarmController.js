@@ -1,7 +1,9 @@
 const Farm = require('../models/Farm');
+const Field = require('../models/Field');
+const Harvest = require('../models/Harvest');
 
 module.exports = {
-    async register(req, res, nex, io){
+    async register(req, res, next, io){
         const {harvestCode, code, name} = req.body;
         
         if(await Farm.findByPk(code)) return res.json({ error: "Farm already exists" });
@@ -13,10 +15,22 @@ module.exports = {
     },
 
     async show(req,res){
-        return res.json(await Farm.findAll({include:{association:'harvest'}}));
+        const {name} =req.query;
+
+        if(name){
+            const farm = await Farm.findOne({
+                where:{name}, 
+                include:[{model: Harvest, as:"harvest"},{model: Field, as:'fields'}]
+            })
+            if(farm) return res.json(farm);
+            else return res.json({error:"farm "+name+" not found"})
+
+        }else{
+            return res.json(await Farm.findAll({include:{association:'harvest'}}));
+        }
     },
 
-    async findById(req,res){
+    async findByCode(req,res){
         const {id} = req.params;
 
         const farm = await Farm.findByPk(id, {include:{association:"fields"}})

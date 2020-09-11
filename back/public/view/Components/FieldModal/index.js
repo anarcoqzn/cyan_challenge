@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {FormGroup, Label, Button, Modal, ModalHeader, ModalBody, ModalFooter,Form, Input } from 'reactstrap';
+import {Spinner, FormGroup, Label, Button, Modal, ModalHeader, ModalBody, ModalFooter,Form, Input } from 'reactstrap';
 import api from '../../../services/api'
 import {toast} from 'react-toastify';
 
@@ -15,6 +15,7 @@ export default class FieldModal extends Component{
         this.handleCode = this.handleCode.bind(this);
         this.handleCreateField = this.handleCreateField.bind(this);
         this.enableButton = this.enableButton.bind(this)
+        this.isLoading = this.isLoading.bind(this);
     }
 
     handleCode(event){
@@ -35,18 +36,19 @@ export default class FieldModal extends Component{
         .then(res =>{
             if (res.data.error) {
                 toast.error(res.data.error)
-                return
+             
+            }else{
+                this.props.loadFields(this.props.fieldData.farmCode)
             }
-            toast.success(`Field created successfully with code '${res.data.code}'`)
-            this.props.loadFields(this.props.fieldData.farmCode)
+
+            this.setState({isLoading:false})
+            this.setState({code:null})
+            return;
         }
         )
         .catch((err)=>{
             toast.error(err.message)
         })
-        this.setState({isLoading:false})
-        this.setState({code:null})
-        this.props.toggle();
     }
 
     enableButton(){
@@ -57,7 +59,7 @@ export default class FieldModal extends Component{
         return(
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
                 <ModalHeader toggle={this.props.toggle}>
-                        Create a new field:{this.state.isLoading && <div>Loading</div>}
+                        Create a new field:{this.state.isLoading && <Spinner color="primary" />}
                 </ModalHeader>
                     <ModalBody>
                         <Form>
