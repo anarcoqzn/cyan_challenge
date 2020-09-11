@@ -1,14 +1,14 @@
 const Farm = require('../models/Farm');
-const { findById } = require('./MillController');
 
 module.exports = {
-    async register(req, res){
+    async register(req, res, nex, io){
         const {harvestCode, code, name} = req.body;
         
-        if(await Farm.findByPk(code)) return res.status(400).send("Farm already exists");
+        if(await Farm.findByPk(code)) return res.json({ error: "Farm already exists" });
 
         const farm = await Farm.create({"code":code,"name":name, "harvestCode": harvestCode})
 
+        io.emit('entity-created', {message:`Farm created: ${code}` })
         return res.status(200).send("Novo Farm "+farm.name+ " criado!");
     },
 

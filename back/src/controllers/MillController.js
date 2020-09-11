@@ -4,12 +4,13 @@ module.exports = {
     async register(req, res){
         
         const { userCpf,name } = req.body;
-        if(userCpf.length === 11 && name.length > 0)   {
-            const mill = await Mill.create({"name":name, "userCpf":userCpf});
-            return res.json(mill);
-        } else {
-            return res.status(500).send("Invalid data")
-        }
+
+        if(await Mill.findOne({name})) return res.json({error: "Mill already exists"})
+
+        const mill = await Mill.create({"name":name, "userCpf":userCpf});
+
+        io.emit('entity-created', {message:`Mill created: ${name}` })
+        return res.json(mill);
     },
 
     async show(req, res){

@@ -1,17 +1,18 @@
 const Field = require('../models/Field');
-const { findById } = require('./MillController');
+
 
 module.exports = {
-    async register(req, res){
+    async register(req, res, next, io){
         
         const {farmCode, code} = req.body;
         const point = {type:'Point', coordinates:req.body.coordinates}
 
-        if(await Field.findByPk(code)) return res.status(400).send("Field already exists")
+        if(await Field.findByPk(code)) return res.json({ error: "Field already exists" })
 
         const field = await Field.create({"code":code,"coordinates":point, "farmCode":farmCode});
-
-        return res.json(field).send("New field created: "+field.code);
+        
+        io.emit('entity-created', {message:`Field created: ${code}` })
+        return res.json(field);
     },
 
     async show(req, res){

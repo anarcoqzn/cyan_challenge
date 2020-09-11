@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import api from '../../../services/api'
-import Field from '../Field';
+import FieldMap from '../FieldMap';
 
 
 export default class Sidebar extends Component{
@@ -10,7 +10,9 @@ export default class Sidebar extends Component{
         this.state={
             mills:[],
             harvests:[],
-            farms:[]
+            farms:[],
+            millSelected:null,
+            harvestSelected:null,
         }
 
         this.loadMills = this.loadMills.bind(this);
@@ -27,14 +29,16 @@ export default class Sidebar extends Component{
     }
 
     loadHarvests(id){
+        this.setState({millSelected:id})
         api.get(`http://localhost:3333/api/mill/${parseInt(id)}`)
         .then(res => {
             const {harvests} = res.data;
             this.setState({harvests}); 
         });
     }
-
+    
     loadFarms(id){
+        this.setState({harvestSelected:id})
         api.get(`http://localhost:3333/api/harvest/${id}`)
         .then(res =>{
                 const {farms} = res.data;
@@ -57,7 +61,7 @@ export default class Sidebar extends Component{
                 )}
             --------
                 {this.state.farms.map(farm =>
-                    <div key={farm.code}>{farm.name}</div>
+                    <div onClick={()=> this.props.loadFields(farm.code)} key={farm.code}>{farm.name}</div>
                 )}
             </div>
         )

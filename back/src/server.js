@@ -1,5 +1,5 @@
 const express = require('express');
-const routes = require("./routes");
+const initRoutes = require("./routes");
 const path = require("path");
 
 require('./database/config/index')
@@ -20,7 +20,7 @@ server.listen(PORT, () => {console.log(`listening at: http://localhost:${PORT}`)
 ///////////
 
 app.use(express.json());
-app.use("/api", routes);
+app.use("/api", initRoutes(io));
 
 app.get("/dist/bundle.js", function(req, res) {
     res.sendFile(path.join(__dirname + '/../public/dist/bundle.js'));
@@ -29,5 +29,3 @@ app.get("/dist/bundle.js", function(req, res) {
 app.get("*", function(req, res) {
     res.sendFile(path.join(__dirname + '/../public/index.html'));
 });
-
-//app.listen(PORT, () => {console.log(`listening at: http://localhost:${PORT}`)})
