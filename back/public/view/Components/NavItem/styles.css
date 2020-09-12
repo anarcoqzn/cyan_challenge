@@ -1,20 +1,3 @@
-.item a{
-    height: 42px;
-    border-radius: 5px;
-    border: 2px solid cadetblue;
-    background: none;
-    margin-top: 10px;
-    font-weight: bold;
-    font-size: 16px;
-    text-decoration:none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.2s;
-    cursor: pointer;
-}
-
-.item a:hover{
-    background: #da552f;
-    color: white;
+#add-button.btn.btn-secondary {
+    margin: auto auto 10px auto;
 }

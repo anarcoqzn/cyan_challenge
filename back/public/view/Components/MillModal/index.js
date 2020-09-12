@@ -8,7 +8,7 @@ export default class MillModal extends Component{
         super(props)
 
         this.state = {
-            name:null,
+            name:"",
             isLoading:false
         }
 
@@ -18,12 +18,12 @@ export default class MillModal extends Component{
     }
 
     handleName(event){
-        this.setState({name:event.target.value})
+        const name = event.target.value.trim();
+        this.setState({name})
     }
 
     handleCreateMill(){
         const newMill = {
-            code:this.state.code,
             name:this.state.name,
         }
         const headers ={
@@ -40,8 +40,8 @@ export default class MillModal extends Component{
             }
 
             this.setState({isLoading:false});
-            this.setState({code:null});
-            this.setState({name:null})
+            this.setState({name:""})
+            this.setState({isModalOpen:false})
             return;
         }
         )
@@ -51,13 +51,21 @@ export default class MillModal extends Component{
     }
 
     enableButton(){
-        return (!this.isEmpty(this.state.name));
+        return (this.isEmpty(this.state.name));
     }
 
     isEmpty(str){
-        return (!str || 0 === str.length) && (!str || /^\s*$/.test(str) && (this.length === 0 || !this.trim()));
+        return (!str && str.length===0 && /^\s*$/.test(str) );
     }
 
+
+    componentDidMount(){
+        if (!String.prototype.trim) {
+            String.prototype.trim = function () {
+              return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
+            };
+        }
+    }
     render(){
         return(
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
@@ -79,7 +87,7 @@ export default class MillModal extends Component{
                         </Form>
                     </ModalBody>
                     <ModalFooter>
-                <Button onClick={this.handleCreateMill} disabled={!this.enableButton()} color="primary">Create</Button>
+                <Button onClick={this.handleCreateMill} disabled={this.enableButton()} color="primary">Create</Button>
                 <Button color="secondary" onClick={this.props.toggle}>Cancel</Button>
                 </ModalFooter>
             </Modal>

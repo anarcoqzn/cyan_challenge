@@ -4,8 +4,9 @@ module.exports = {
     async register(req, res, next, io){
         
         const { name } = req.body;
-        
-        if(await Mill.findOne({name})) return res.json({error: "Mill already exists"});
+        const temp = await Mill.findOne({where:{name}});
+        console.log(temp)
+        if(temp) return res.json({error: "Mill already exists"});
         
         const mill = await Mill.create({"name":name});
         
@@ -22,7 +23,7 @@ module.exports = {
             else return res.json({error:"Mill "+name+" not found."})
         }
 
-        else return res.json(await Mill.findAll({include:{association:'harvests'}}));
+        else return res.json(await Mill.findAll({include:{association:"harvests"}}));
     },
 
     async findById(req, res){

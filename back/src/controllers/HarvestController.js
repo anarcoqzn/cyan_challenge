@@ -5,7 +5,7 @@ module.exports = {
         
         const {millId,code, start, end} = req.body;
 
-        if(await Harvest.findByPk(code)) return res.json({error: "Farm already exists"})
+        if(await Harvest.findByPk(code)) return res.json({error: "Harvest already exists"})
 
         const harvest = await Harvest.create({code, start, end, millId});
 

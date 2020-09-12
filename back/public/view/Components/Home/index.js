@@ -6,7 +6,6 @@ import socketIOClient from 'socket.io-client';
 import {toast} from 'react-toastify';
 
 import './styles.css'
-import { useLeaflet } from 'react-leaflet';
 
 export default class Home extends Component{
     constructor(props){
