@@ -3,15 +3,12 @@ const FieldController = require('./controllers/FieldController');
 const FarmController = require('./controllers/FarmController');
 const HarvestController = require('./controllers/HarvestController');
 const MillController = require('./controllers/MillController');
-const UserController = require('./controllers/UserController');
 const { Router } = require('express');
 
 routes = express.Router();
 
 module.exports = io => {
-    routes.post("/user", UserController.register);
-    routes.get("/user", UserController.show);
-    
+        
     routes.post("/mill",(req, res, next) =>  MillController.register(req,res,next,io));
     routes.get("/mill", MillController.show);
     routes.get("/mill/:id", MillController.findById);

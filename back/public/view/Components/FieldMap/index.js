@@ -4,6 +4,7 @@ import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import FieldModal from '../FieldModal'
 
 import './styles.css'
+import MillModal from "../MillModal";
 
 export default class FieldMap extends Component{
     constructor(props){
@@ -18,10 +19,11 @@ export default class FieldMap extends Component{
                     coordinates: null,
                     farmCode: null
                 }
-            }
+            },
+
         }
         this.handleMapClick = this.handleMapClick.bind(this);
-        this.toggleModal = this.toggleModal.bind(this)
+        this.toggleFieldModal = this.toggleFieldModal.bind(this)
     }
     
     handleMapClick(e){
@@ -42,7 +44,7 @@ export default class FieldMap extends Component{
         } })
     }
     
-    toggleModal(){
+    toggleFieldModal(){
         this.setState({ fieldModal : {
             isOpen:!this.state.fieldModal.isOpen
         }})
@@ -64,10 +66,10 @@ export default class FieldMap extends Component{
             <div>
                 <FieldModal 
                     loadFields={this.props.loadFields} 
-                    toggle={this.toggleModal} 
+                    toggle={this.toggleFieldModal} 
                     fieldData={this.state.fieldModal.fieldData} 
                     isOpen={this.state.fieldModal.isOpen}/>
-                    
+                
                 <Map
                     boundsOptions={{padding: [50, 50]}} 
                     center={center} zoom={this.state.zoom} 
@@ -81,14 +83,14 @@ export default class FieldMap extends Component{
                     />
 
                     {this.props.fields.map(field =>
-                            <Marker key={field.code} icon ={myIcon} position={field.coordinates.coordinates}>
-                                <Popup>
-                                    <span>Field Code: {field.code}</span>
-                                    <br/>
-                                    <span>Latitude: {field.coordinates.coordinates[0]}</span><br/>
-                                    <span>Longitude: {field.coordinates.coordinates[1]}</span><br/>
-                                </Popup>
-                            </Marker>
+                        <Marker key={field.code} icon ={myIcon} position={field.coordinates.coordinates}>
+                            <Popup>
+                                <span>Field Code: {field.code}</span>
+                                <br/>
+                                <span>Latitude: {field.coordinates.coordinates[0]}</span><br/>
+                                <span>Longitude: {field.coordinates.coordinates[1]}</span><br/>
+                            </Popup>
+                        </Marker>
                         )
                     }
                 </Map>

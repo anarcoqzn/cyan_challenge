@@ -11,12 +11,7 @@ class Mill extends Model{
     }
 
     static associate(models){
-        this.belongsTo(models.User, {
-            foreignKey:"userCpf",
-            as:"owner"
-        });
-
-        this.hasMany(models.Harvest,{
+       this.hasMany(models.Harvest,{
             foreignKey:"millId",
             as:"harvests"
         })

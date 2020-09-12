@@ -6,15 +6,16 @@ import socketIOClient from 'socket.io-client';
 import {toast} from 'react-toastify';
 
 import './styles.css'
+import { useLeaflet } from 'react-leaflet';
 
 export default class Home extends Component{
     constructor(props){
         super(props);
         this.state={
            fields:[],
-           farmSelected:null
+           farmSelected:null,
+           
         }
-        
         this.loadFields = this.loadFields.bind(this)
     }
     
@@ -23,6 +24,7 @@ export default class Home extends Component{
         api.get(`http://localhost:3333/api/farm/${id}`)
         .then(res =>{
                 this.setState({fields:res.data.fields})
+                console.log(this.state.fields)
             }
         )
     }
@@ -41,7 +43,12 @@ export default class Home extends Component{
                     <Sidebar loadFields={this.loadFields}/>
                 </div>
                 <div className="map-container">
-                    <FieldMap loadFields={this.loadFields} farmSelected={this.state.farmSelected} fields={this.state.fields}/>
+                    <FieldMap 
+                        loadFields={this.loadFields} 
+                        farmSelected={this.state.farmSelected} 
+                        fields={this.state.fields}
+                    
+                    />
                 </div>
             </div>
         )

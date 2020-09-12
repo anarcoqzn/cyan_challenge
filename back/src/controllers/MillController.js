@@ -3,11 +3,11 @@ const Mill = require('../models/Mill');
 module.exports = {
     async register(req, res, next, io){
         
-        const { userCpf,name } = req.body;
+        const { name } = req.body;
         
         if(await Mill.findOne({name})) return res.json({error: "Mill already exists"});
         
-        const mill = await Mill.create({"name":name, "userCpf":userCpf});
+        const mill = await Mill.create({"name":name});
         
         io.emit('entity-created', {message:`Mill created: ${name}` })
         return res.json(mill);
@@ -22,7 +22,7 @@ module.exports = {
             else return res.json({error:"Mill "+name+" not found."})
         }
 
-        else return res.json(await Mill.findAll({include:{association:'owner'}}));
+        else return res.json(await Mill.findAll({include:{association:'harvests'}}));
     },
 
     async findById(req, res){

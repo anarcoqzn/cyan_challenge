@@ -3,47 +3,45 @@ import {Spinner, FormGroup, Label, Button, Modal, ModalHeader, ModalBody, ModalF
 import api from '../../../services/api'
 import {toast} from 'react-toastify';
 
-export default class FieldModal extends Component{
+export default class MillModal extends Component{
     constructor(props){
         super(props)
 
         this.state = {
-            code:null,
+            name:null,
             isLoading:false
         }
 
-        this.handleCode = this.handleCode.bind(this);
-        this.handleCreateField = this.handleCreateField.bind(this);
+        this.handleName = this.handleName.bind(this);
+        this.handleCreateMill = this.handleCreateMill.bind(this);
         this.enableButton = this.enableButton.bind(this)
     }
 
-    handleCode(event){
-        this.setState({code:event.target.value})
+    handleName(event){
+        this.setState({name:event.target.value})
     }
 
-    handleCreateField(){
-        const newField = {
+    handleCreateMill(){
+        const newMill = {
             code:this.state.code,
-            coordinates:this.props.fieldData.coordinates,
-            farmCode: this.props.fieldData.farmCode
+            name:this.state.name,
         }
-        
         const headers ={
             'Content-Type':'application/json'
         }
-
         this.setState({isLoading:true})
-        api.post("http://localhost:3333/api/field", newField, headers)
+        api.post("http://localhost:3333/api/mill", newMill, headers)
         .then(res =>{
             if (res.data.error) {
-                toast.error(res.data.error)
+                toast.error(res.data.error);
              
             }else{
-                this.props.loadFields(this.props.fieldData.farmCode)
+                this.props.loadMills();
             }
 
-            this.setState({isLoading:false})
-            this.setState({code:null})
+            this.setState({isLoading:false});
+            this.setState({code:null});
+            this.setState({name:null})
             return;
         }
         )
@@ -53,32 +51,35 @@ export default class FieldModal extends Component{
     }
 
     enableButton(){
-        return this.state.code > 0;
+        return (!this.isEmpty(this.state.name));
+    }
+
+    isEmpty(str){
+        return (!str || 0 === str.length) && (!str || /^\s*$/.test(str) && (this.length === 0 || !this.trim()));
     }
 
     render(){
         return(
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
                 <ModalHeader toggle={this.props.toggle}>
-                        Create a new field:{this.state.isLoading && <Spinner color="primary" />}
+                        Create a new mill:{this.state.isLoading && <Spinner color="primary" />}
                 </ModalHeader>
                     <ModalBody>
                         <Form>
                         <FormGroup>
-                            <Label for="code">Code</Label>
+                            <Label for="name">Name</Label>
                             <Input 
-                                onChange={this.handleCode} 
-                                type="number" 
-                                name="code" 
-                                id="code" 
-                                valid={this.state.code > 0}
+                                onChange={this.handleName} 
+                                type="text" 
+                                name="name" 
+                                valid={!this.isEmpty(this.state.name)}
                                 required
                                 />
                         </FormGroup>
                         </Form>
                     </ModalBody>
                     <ModalFooter>
-                <Button onClick={this.handleCreateField} disabled={!this.enableButton()} color="primary">Create</Button>
+                <Button onClick={this.handleCreateMill} disabled={!this.enableButton()} color="primary">Create</Button>
                 <Button color="secondary" onClick={this.props.toggle}>Cancel</Button>
                 </ModalFooter>
             </Modal>

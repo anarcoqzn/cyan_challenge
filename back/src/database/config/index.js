@@ -1,7 +1,6 @@
 
 const Sequelize = require("sequelize");
 const dbConfig = require('./dbconfig');
-const User = require ('../../models/User');
 const Field = require('../../models/Field');
 const Farm = require('../../models/Farm');
 const Harvest = require('../../models/Harvest');
@@ -9,7 +8,6 @@ const Mill = require('../../models/Mill');
 
 const connection = new Sequelize(dbConfig);
 
-User.init(connection);
 Field.init(connection);
 Farm.init(connection);
 Harvest.init(connection);
@@ -19,6 +17,5 @@ Field.associate(connection.models);
 Farm.associate(connection.models);
 Harvest.associate(connection.models);
 Mill.associate(connection.models);
-User.associate(connection.models);
 
 module.exports = connection;
