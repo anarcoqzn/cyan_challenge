@@ -6,6 +6,7 @@ import {Button, Collapse, ListGroup, ListGroupItem} from 'reactstrap';
 
 import './styles.css'
 import { BsPlusCircleFill } from "react-icons/bs";
+import FarmModal from "../FarmModal";
 
 export default class NavItem extends Component{
     constructor(props){
@@ -16,10 +17,15 @@ export default class NavItem extends Component{
                 isOpen:false
             },
             millSelected: null,
+            harvestSelected:null,
             harvests:[],
-            isCollapseOpen:false
+            isCollapseOpen:false,
+            farmModal:{
+                isOpen:false
+            }
         }
 
+        this.toggleFarmModal = this.toggleFarmModal.bind(this);
         this.loadHarvests = this.loadHarvests.bind(this);
         this.toggleHarvestModal = this.toggleHarvestModal.bind(this);
         this.loadFarms = this.loadFarms.bind(this)
@@ -40,14 +46,12 @@ export default class NavItem extends Component{
     }
 
     loadFarms(id){
+        this.setState({harvestSelected:id})
         api.get(`http://localhost:3333/api/harvest/${id}`)
         .then(res =>{
-            const farm = res.data.farms[0];
-
-            if(!farm) return(toast.warn("Farm not found"))
-
-            this.setState({farmSelected:farm});
-            this.props.loadFields(farm.code);
+            const farms = res.data.farms;
+            console.log(farms)
+            if(farms.length === 0) return(this.toggleFarmModal())
         })
     }
 
@@ -59,13 +63,23 @@ export default class NavItem extends Component{
         })
     }
 
-    toggleCollapse(){
-        if(this.state.isCollapseOpen) this.setState({isCollapseOpen:false});
+    toggleFarmModal(){
+        this.setState({
+            farmModal:{
+                isOpen:!this.state.farmModal.isOpen
+            }
+        })
+    }
+
+    toggleCollapse(id){
+        if(this.state.isCollapseOpen)  {
+            this.setState({isCollapseOpen:false});
+        }
         else this.loadHarvests(this.props.millId);
     }
 
     componentDidMount(){
-        console.log(this.state.isCollapseOpen)
+        
     }
     
     render(){
@@ -78,16 +92,23 @@ export default class NavItem extends Component{
                    millName={this.props.content}
                 />
 
-                <Button className="item" onClick={()=>this.toggleCollapse()}
+                <FarmModal
+                    toggle={this.toggleFarmModal}
+                    isOpen={this.state.farmModal.isOpen}
+                    harvestCode={this.state.harvestSelected}
+                />
+
+                <ListGroupItem className="item" onClick={()=>this.toggleCollapse(this.props.millId)}
                     color="info">
                     {this.props.content}
-                </Button>
+                </ListGroupItem>
 
                 <Collapse isOpen={this.state.isCollapseOpen}>
                     <ListGroup>
                         {this.state.harvests.map(h =>
-                        <ListGroupItem key={h.code}>Harvest code: {h.code}</ListGroupItem>
-                        )}
+                        <ListGroupItem
+                                onClick={()=>this.loadFarms(h.code)}
+                                key={h.code}>Harvest code: {h.code}</ListGroupItem>)}
                     </ListGroup>
 
                     <Button id="add-button" onClick={this.toggleHarvestModal}>

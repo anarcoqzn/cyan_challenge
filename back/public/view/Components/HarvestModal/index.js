@@ -5,6 +5,7 @@ import {toast} from 'react-toastify';
 import DatePicker from 'react-datepicker'
 
 import "react-datepicker/dist/react-datepicker.css";
+import "./styles.css"
 
 export default class HarvestModal extends Component{
     constructor(props){
@@ -76,7 +77,7 @@ export default class HarvestModal extends Component{
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
                 <ModalHeader toggle={this.props.toggle}>
                         Create a new harvest {this.state.isLoading && <Spinner color="primary" />}
-                        <h6>Selected mill: {this.props.millName}</h6>
+                        <p id="text">Selected mill: {this.props.millName}</p>
                 </ModalHeader>
                     <ModalBody>
                         <Form>

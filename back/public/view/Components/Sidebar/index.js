@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import api from '../../../services/api'
 import NavItem from '../Navitem';
 import {BsPlusCircle} from 'react-icons/bs'
-import {Button, ButtonGroup, Tooltip} from 'reactstrap';
+import {Button, ListGroup, Tooltip} from 'reactstrap';
 
 import './styles.css'
 import MillModal from '../MillModal';
@@ -68,14 +68,14 @@ export default class Sidebar extends Component{
                     isOpen={this.state.millModal.isOpen}
                 />
 
-                <ButtonGroup vertical>
+                <ListGroup>
                     {this.state.mills.map(mill =>
                         <NavItem 
                             key={mill.id} 
                             millId={mill.id} 
                             content={mill.name}/>
                     )}
-                </ButtonGroup>
+                </ListGroup>
 
                 <span ref={this.state.toolTipRef}>
                     <Button id="add-button" onClick={this.handleAddMillClick}>
