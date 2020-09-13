@@ -51,25 +51,32 @@ export default class Sidebar extends Component{
                     isOpen={this.state.millModal.isOpen}
                 />
 
-                <ListGroup>
+                <ListGroup id="Mill">
                     <SearchByName
                         objectName={"Mill"}
                         loadMills={this.props.loadMills}
                     />
-                    <SearchByName
-                        objectName={"Farm"}
-                        loadFarms={this.props.loadFarms}
-                    />
                 </ListGroup>
-                <ListGroup>
+
+                <ListGroup id="Harvest">
                     <SearchByCode
                         objectName={"Harvest"}
                         loadHarvests={this.props.loadHarvests}
                     />
-                    <SearchByCode
+                </ListGroup>
+
+                <ListGroup id="Farm">   
+                    <SearchByName
                         objectName={"Farm"}
                         loadFarms={this.props.loadFarms}
                     /> 
+                    <SearchByCode
+                        objectName={"Farm"}
+                        loadFarms={this.props.loadFarms}
+                    />
+                </ListGroup>
+
+                <ListGroup id="Field">
                     <SearchByCode
                         objectName={"Field"}
                         loadFields={this.props.loadFields}

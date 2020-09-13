@@ -6,6 +6,7 @@ import socketIOClient from 'socket.io-client';
 import {toast} from 'react-toastify';
 
 import './styles.css'
+import NavBar from '../NavBar';
 
 export default class Home extends Component{
     constructor(props){
@@ -98,6 +99,7 @@ export default class Home extends Component{
         return (
             <div className="app-container">
                 <div className="sidebar-container">
+                <NavBar/>
                     <Sidebar 
                         loadMills={this.loadMills}
                         loadHarvests={this.loadHarvests}
