@@ -30,8 +30,7 @@ export default class Home extends Component{
             
             if(res.data.error) {toast.error(res.data.error)}
             else{
-                this.setState({mill:res.data});
-                const harvests = this.state.mill.harvests;
+                const harvests = res.data.harvests;
                 const allFields = [];
                 harvests.map(harvest =>
                     harvest.farms.map(farm=>
@@ -47,15 +46,19 @@ export default class Home extends Component{
 
     loadHarvests(params){
         
-        api.get(`http://localhost:3333/api/mill${parseInt(id)}`)
+        api.get(`http://localhost:3333/api/harvest${params}`)
         .then(res => {
-            const harvests = res.data.harvests;
-            
-            if(harvests.length === 0) return(
-                this.toggleHarvestModal()
-            )
-            this.setState({harvests});
-            this.setState({isHarvestCollapseOpen:true})
+            if(res.data.error) {toast.error(res.data.error)}
+            else{
+                const farms = res.data.farms;
+                const allFields = [];
+                farms.map(farm=>
+                    farm.fields.map(field=>
+                        allFields.push(field)
+                    )
+                )
+                this.setState({fields:allFields})
+            }
         });
     }
 

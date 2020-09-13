@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { BiSearch } from 'react-icons/bi';
-import { Button, Input, ListGroupItem } from 'reactstrap';
+import { Button, Input, Label, ListGroupItem } from 'reactstrap';
 
 import './styles.css'
 
@@ -9,7 +9,7 @@ export default class SearchByCode extends Component{
         super(props)
 
         this.state = {
-            input:"",
+            input:0,
             harvest:{},
             farm:{},
             field:{}
@@ -20,7 +20,7 @@ export default class SearchByCode extends Component{
     }
     
     onInputChange(event){
-        this.setState({input});
+        this.setState({input:event.target.value});
     }
 
     searchOnClick(){
@@ -28,7 +28,7 @@ export default class SearchByCode extends Component{
         if(objectName === "Harvest"){
             const params = "/"+this.state.input;
             this.props.loadHarvests(params);
-            
+
         }else if(objectName === "Farm"){
             
         }else if(objectName === "Field"){
@@ -39,8 +39,8 @@ export default class SearchByCode extends Component{
     render(){
         return(
            <ListGroupItem>
+               <Label>{"Search "+this.props.objectName+" by code"}</Label>
                 <Input
-                    placeholder={"Search "+this.props.objectName+" by code"} 
                     type="number"
                     value={this.state.input}
                     valid={this.state.input>0}

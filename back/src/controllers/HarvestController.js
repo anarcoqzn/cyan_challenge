@@ -1,3 +1,5 @@
+const Farm = require("../models/Farm");
+const Field = require("../models/Field");
 const Harvest = require("../models/Harvest");
 
 module.exports = {
@@ -32,8 +34,24 @@ module.exports = {
     async findByCode(req, res){
         const{id} = req.params;
 
-        const harvest = await Harvest.findByPk(id, {include:{association:'farms'}})
-
+        const harvest = await Harvest.findByPk(id, 
+            {
+            include:[{
+                model: Farm,
+                as:'farms',
+                include:[{
+                    model:Field,
+                    as:'fields',
+                    attributes:['code', 'coordinates']
+                }],
+                attributes:{
+                    exclude:['name', 'createdAt', 'updatedAt','harvestCode']
+                }
+            }],
+            attributes:{
+                exclude:['start', 'end','createdAt', 'updatedAt','millId']
+            }
+        })
         return res.json(harvest)
     }
 }
