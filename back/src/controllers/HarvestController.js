@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const Farm = require("../models/Farm");
 const Field = require("../models/Field");
 const Harvest = require("../models/Harvest");
@@ -20,10 +21,28 @@ module.exports = {
 
         if(start && end) {
             const harvests = await Harvest.findAll({where: {
-                start: {$gte:start},
-                end: {$lte:end}
-            }, include: {association:'farms'}});
-            if(!harvests) return res.json({error:"There is no harvest between these dates"})
+                
+                start: {[Op.gte]:start},
+                end: {[Op.lte]:end}
+                }, 
+                include:[{
+                    model: Farm,
+                    as: 'farms',
+                    include:[{
+                        model:Field,
+                        as:'fields',
+                        attributes:['code', 'coordinates']
+                    }],
+                    attributes:{
+                        exclude:['name', 'createdAt', 'updatedAt','harvestCode']
+                    }
+                }],
+                attributes:{
+                    exclude:['start', 'end','createdAt', 'updatedAt','millId']
+                }
+            });
+
+            if(harvests.length === 0) return res.json({error:"There is no harvest between these dates"})
             else return res.json(harvests);
 
         }else{

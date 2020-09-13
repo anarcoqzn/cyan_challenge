@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {ListGroup} from 'reactstrap';
 import SearchByCode from '../SearchByCode';
+import SearchByDate from '../SearchByDates';
 import SearchByName from '../SearchByName';
 
 import './styles.css'
@@ -21,6 +22,10 @@ export default class Sidebar extends Component{
                 <ListGroup id="Harvest">
                     <SearchByCode
                         objectName={"Harvest"}
+                        loadHarvests={this.props.loadHarvests}
+                    />
+
+                    <SearchByDate
                         loadHarvests={this.props.loadHarvests}
                     />
                 </ListGroup>

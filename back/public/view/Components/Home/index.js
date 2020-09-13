@@ -62,14 +62,26 @@ export default class Home extends Component{
         .then(res => {
             if(res.data.error) {toast.error(res.data.error)}
             else{
+                const allFields = [];
                 if(params){
-                    const farms = res.data.farms;
-                    const allFields = [];
-                    farms.map(farm=>
-                        farm.fields.map(field=>
-                            allFields.push(field)
+                    if(params.length == 2){
+                        const farms = res.data.farms;
+                        farms.map(farm=>
+                            farm.fields.map(field=>
+                                allFields.push(field))
+                            )
+                    }else{
+                        const harvests = res.data;
+                        harvests.map(harvest=>{
+                            const farms = harvest.farms
+                            farms.map(farm=>
+                                farm.fields.map(field =>
+                                    allFields.push(field)
+                                    )
+                                )
+                            }
                         )
-                    )
+                    }
                     this.setState({fields:allFields})
                 }
             }
