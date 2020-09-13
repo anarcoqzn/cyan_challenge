@@ -37,7 +37,13 @@ module.exports = {
     async findByCode(req,res){
         const {id} = req.params;
 
-        const farm = await Farm.findByPk(id, {include:{association:"fields"}})
+        const farm = await Farm.findByPk(id, {
+            include:[{model: Field, as:'fields'}],
+            attributes:{
+                exclude:['name', 'createdAt', 'updatedAt', 'harvestCode']
+                }
+            }
+        )
 
         if(!farm) return res.status(404).send("Farm not found")
 

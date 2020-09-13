@@ -10,9 +10,6 @@ export default class SearchByCode extends Component{
 
         this.state = {
             input:0,
-            harvest:{},
-            farm:{},
-            field:{}
         }
 
         this.searchOnClick = this.searchOnClick.bind(this);
@@ -25,14 +22,17 @@ export default class SearchByCode extends Component{
 
     searchOnClick(){
         const objectName = this.props.objectName
+        const params = "/"+this.state.input;
+
         if(objectName === "Harvest"){
-            const params = "/"+this.state.input;
             this.props.loadHarvests(params);
 
         }else if(objectName === "Farm"){
-            
+            this.props.loadFarms(params)
+
         }else if(objectName === "Field"){
-            
+            this.props.loadFields(params)
+
         }
     }
 

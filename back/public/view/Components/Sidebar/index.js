@@ -72,6 +72,10 @@ export default class Sidebar extends Component{
                         objectName={"Harvest"}
                         loadHarvests={this.props.loadHarvests}
                     />
+                    <SearchByCode
+                        objectName={"Farm"}
+                        loadFarms={this.props.loadFarms}
+                    />
                 </ListGroup>
 
                 <span ref={this.state.toolTipRef}>
