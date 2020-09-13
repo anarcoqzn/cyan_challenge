@@ -10,7 +10,7 @@ export default class FieldMap extends Component{
         super(props)
         
         this.state={
-            zoom:2,
+            zoom:5,
             fieldModal: {
                 isOpen: false,
                 fieldData: {
@@ -21,33 +21,19 @@ export default class FieldMap extends Component{
             }
         }
         this.handleMapClick = this.handleMapClick.bind(this);
-        this.toggleFieldModal = this.toggleFieldModal.bind(this);
     }
 
     
     handleMapClick(e){
-        if(!this.props.farmSelected.id){
-            toast.info("No farm selected")
-            return;
-        }
         const {lat, lng} = e.latlng;
         
         const fieldData={
             coordinates:[lat,lng],
             code:null,
-            farmCode:this.props.farmSelected.id
         }
-        this.setState({ fieldModal: {
-            isOpen: true,
-            fieldData:fieldData
-        } })
+        this.props.toggleFieldModal(fieldData);
     }
     
-    toggleFieldModal(){
-        this.setState({ fieldModal : {
-            isOpen:!this.state.fieldModal.isOpen
-        }})
-    }
 
     render(){
 
@@ -59,17 +45,11 @@ export default class FieldMap extends Component{
             shadowSize: [68, 95],
             shadowAnchor: [22, 94]
         });
-
+        
         const center = this.props.fields[0] ? this.props.fields[0].coordinates.coordinates : [0,0];
 
         return (
             <div>
-                <FieldModal
-                    loadFields={this.props.loadFields} 
-                    toggle={this.toggleFieldModal} 
-                    fieldData={this.state.fieldModal.fieldData} 
-                    isOpen={this.state.fieldModal.isOpen}
-                    farmSelected={this.props.farmSelected}/>
                 
                 <Map
                     boundsOptions={{padding: [50, 50]}} 

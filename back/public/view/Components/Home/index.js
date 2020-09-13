@@ -12,17 +12,26 @@ export default class Home extends Component{
     constructor(props){
         super(props);
         this.state={
-           farmSelected:{
-               name:null,
-               id:null
-           },  
-           fields: []
+            fieldModal:{
+                isOpen:false
+            },
+            fieldData:{},
+            fields: []
         }
 
+        this.toggleFieldModal = this.toggleFieldModal.bind(this);
         this.loadMills = this.loadMills.bind(this);
         this.loadFields = this.loadFields.bind(this);
         this.loadHarvests = this.loadHarvests.bind(this);
         this.loadFarms = this.loadFarms.bind(this);
+    }
+
+    toggleFieldModal(fieldData){
+
+        this.setState({fieldData});
+        this.setState({fieldModal:{
+            isOpen:!this.state.fieldModal.isOpen
+        }})
     }
 
     loadMills(params) {
@@ -76,7 +85,6 @@ export default class Home extends Component{
                 if(params){
                     this.setState({farm:res.data});
                     const fields = this.state.farm.fields;
-                    console.log(this.state.farm)
                     this.setState({fields})
                 }
             }
@@ -101,11 +109,18 @@ export default class Home extends Component{
         });
     }
 
+
+
     render(){
         return (
             <div className="app-container">
                 <div className="sidebar-container">
-                    <NavBar/>
+                    <NavBar
+                        fieldData={this.state.fieldData}
+                        isFieldModalOpen={this.state.fieldModal.isOpen}
+                        toggleFieldModal={this.toggleFieldModal}
+                        loadFields={this.loadFields}
+                    />
                     <Sidebar 
                         loadMills={this.loadMills}
                         loadHarvests={this.loadHarvests}
@@ -114,8 +129,8 @@ export default class Home extends Component{
                     />
                 </div>
                 <div className="map-container">
-                    <FieldMap 
-                        farmSelected={this.state.farmSelected}
+                    <FieldMap
+                        toggleFieldModal={this.toggleFieldModal} 
                         loadFields={this.loadFields}
                         fields={this.state.fields}
                     />

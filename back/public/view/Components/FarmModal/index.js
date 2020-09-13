@@ -76,10 +76,6 @@ export default class FarmModal extends Component{
             toast.error(err.message)
         })
 
-        this.setState({isLoading:false});
-        this.setState({code:null});
-        this.setState({name:""});
-        this.props.loadFarms(this.props.harvestCode);
         this.props.toggle();
     }
 

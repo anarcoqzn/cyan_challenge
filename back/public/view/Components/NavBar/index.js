@@ -6,6 +6,7 @@ import FarmModal from '../FarmModal';
 
 import './styles.css'
 import api from '../../../services/api';
+import FieldModal from '../FieldModal';
 
 export default class NavBar extends Component {
     constructor(props){
@@ -14,6 +15,7 @@ export default class NavBar extends Component {
         this.state={
             mills:[],
             harvests:[],
+            farms:[],
 
             collapsed: false,
             millModal:{
@@ -27,6 +29,7 @@ export default class NavBar extends Component {
             }
         }
 
+        this.getFarms = this.getFarms.bind(this);
         this.getHarvests = this.getHarvests.bind(this);
         this.getMills = this.getMills.bind(this);
         this.toggleMillModal = this.toggleMillModal.bind(this);
@@ -71,6 +74,13 @@ export default class NavBar extends Component {
         })
     }
 
+    getFarms(){
+        api.get("http://localhost:3333/api/farm")
+        .then(res =>{
+            this.setState({farms:res.data})
+        })
+    }
+
     render(){
     return (
         <div>
@@ -93,6 +103,21 @@ export default class NavBar extends Component {
                 harvests={this.state.harvests}
                 isOpen={this.state.farmModal.isOpen}
                 toggle={this.toggleFarmModal}
+            />
+
+            <FieldModal
+                getMills={this.getMills}
+                getHarvests={this.getHarvests}
+                getFarms={this.getFarms}
+
+                mills={this.state.mills}
+                harvests={this.state.harvests}
+                farms={this.state.farms}
+
+                isOpen={this.props.isFieldModalOpen}
+                toggle={this.props.toggleFieldModal}
+                fieldData={this.props.fieldData}
+                loadFields={this.props.loadFields}
             />
 
             <Navbar color="faded" light>
