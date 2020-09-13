@@ -13,13 +13,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      userCpf:{
-        type: Sequelize.STRING(11),
-        allowNull: false,
-        references: { model: 'Users', key: 'cpf' },
-        onUpdate:'CASCADE',
-        onDelete:'CASCADE'
-      },
       createdAt:{
         type: Sequelize.DATE,
         allowNull: false

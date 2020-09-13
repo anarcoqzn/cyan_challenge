@@ -1,26 +1,19 @@
 import React, { Component } from 'react';
-import User from './Components/User';
-import Mill from './Components/Mill';
-import {BrowserRouter,Route, Switch} from 'react-router-dom';
-
-import Home from './Components/Home';
+import { ToastContainer} from 'react-toastify';
 import Header from './Components/Header';
+import 'react-toastify/dist/ReactToastify.css';
+import Home from './Components/Home';
 
 class App extends Component {
 
     render() {
         return (
             <div>
-            <Header/>
-                <div>
-                    <BrowserRouter>
-                        <Switch>
-                            <Route exact path="/" component={Home}/>
-                            <Route path="/user" component={User}/>
-                            <Route path="/mill/:id" component={Mill}/>
-                        </Switch>
-                    </BrowserRouter>
-                </div>
+                <ToastContainer 
+                    hideProgressBar={true}
+                />
+                <Header/>
+                <Home/>
             </div>
         )
     }

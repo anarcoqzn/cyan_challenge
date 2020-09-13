@@ -3,27 +3,27 @@ const FieldController = require('./controllers/FieldController');
 const FarmController = require('./controllers/FarmController');
 const HarvestController = require('./controllers/HarvestController');
 const MillController = require('./controllers/MillController');
-const UserController = require('./controllers/UserController');
+const { Router } = require('express');
 
 routes = express.Router();
 
-routes.post("/user", UserController.register);
-routes.get("/user", UserController.show);
+module.exports = io => {
+        
+    routes.post("/mill",(req, res, next) =>  MillController.register(req,res,next,io));
+    routes.get("/mill", MillController.show);
+    routes.get("/mill/:id", MillController.findById);
 
-routes.get("/mill", MillController.show);
-routes.get("/mill/:id", MillController.findById);
-routes.get("/mill/:millName", MillController.findMillByName);
-routes.post("/mill", MillController.register);
+    routes.post("/harvest",(req, res, next) =>HarvestController.register(req,res,next,io));
+    routes.get("/harvest", HarvestController.show);
+    routes.get("/harvest/:id",HarvestController.findByCode);
 
-//routes.get("/harvest", HarvestController.getHarvestsFromMill);
-routes.get("/harvest", HarvestController.show)
-routes.get("/farm/:harvest",FarmController.getFarmsFromHarvest)
-routes.post("/harvest", HarvestController.register);
+    routes.post("/farm", (req, res, next) => FarmController.register(req,res,next,io));
+    routes.get("/farm", FarmController.show);
+    routes.get("/farm/:id", FarmController.findByCode);
 
-routes.get("/:harvestCode/farm", FarmController.show);
-routes.post("/:harvestCode/farm", FarmController.register);
+    routes.post("/field", (req, res, next)  => FieldController.register(req, res, next, io));
+    routes.get("/field", FieldController.show);
+    routes.get("/field/:id", FieldController.findByCode);
 
-routes.post("/:farmCode/field", FieldController.register);
-routes.get("/:farmCode/field", FieldController.show);
-
-module.exports = routes;
+    return routes
+};

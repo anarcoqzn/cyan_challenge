@@ -1,0 +1,9 @@
+#add-button{
+    display: flex;
+    margin: 10px 60% auto 40%;
+    cursor: pointer;
+}
+
+.item.list-group-item{
+    text-align: center;
+}
