@@ -3,6 +3,8 @@ import {Spinner, FormGroup, Label, Button, Modal, ModalHeader, ModalBody, ModalF
 import api from '../../../services/api'
 import {toast} from 'react-toastify';
 
+import '../HarvestModal/styles.css'
+
 export default class FieldModal extends Component{
     constructor(props){
         super(props)
@@ -36,15 +38,16 @@ export default class FieldModal extends Component{
         api.post("http://localhost:3333/api/field", newField, headers)
         .then(res =>{
             if (res.data.error) {
+                this.setState({isLoading:false})
                 toast.error(res.data.error)
-             
+                this.props.toggle();
+                return;
             }else{
-                this.props.loadFields(this.props.fieldData.farmCode)
+                this.props.loadFields(this.props.farmSelected)
+                this.setState({isLoading:false})
+                this.setState({code:null})
+                this.props.toggle();
             }
-
-            this.setState({isLoading:false})
-            this.setState({code:null})
-            return;
         }
         )
         .catch((err)=>{
@@ -60,7 +63,8 @@ export default class FieldModal extends Component{
         return(
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
                 <ModalHeader toggle={this.props.toggle}>
-                        Create a new field:{this.state.isLoading && <Spinner color="primary" />}
+                        Create a new field {this.state.isLoading && <Spinner color="primary" />}
+                        <p id="text">Farm selected: {this.props.farmSelected.name}</p>
                 </ModalHeader>
                     <ModalBody>
                         <Form>

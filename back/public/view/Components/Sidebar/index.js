@@ -69,7 +69,8 @@ export default class Sidebar extends Component{
 
                 <ListGroup>
                     {this.state.mills.map(mill =>
-                        <NavItem 
+                        <NavItem
+                            loadFields={this.props.loadFields}
                             key={mill.id} 
                             millId={mill.id} 
                             content={mill.name}/>

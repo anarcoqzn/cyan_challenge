@@ -16,7 +16,7 @@ export default class NavItem extends Component{
             harvestModal:{
                 isOpen:false
             },
-            millSelected: null,
+            millSelected: this.props.millId,
             harvestSelected:null,
             harvests:[],
             farms:[],
@@ -84,13 +84,14 @@ export default class NavItem extends Component{
             this.setState({millSelected:null});
             this.setState({harvestSelected:null});
         }
-        else this.loadHarvests(this.props.millId);
+        else {
+            this.loadHarvests(this.props.millId)
+        };
     }
 
     toggleFarmCollapse(hCode){
         if(this.state.isFarmCollapseOpen)  {
             this.setState({isFarmCollapseOpen:false});
-            this.setState({harvestSelected:null});
         }
         else this.loadFarms(hCode);
     }
@@ -109,6 +110,7 @@ export default class NavItem extends Component{
                     toggle={this.toggleFarmModal}
                     isOpen={this.state.farmModal.isOpen}
                     harvestCode={this.state.harvestSelected}
+                    loadFarms={this.loadFarms}
                 />
 
                 <ListGroupItem className="item" onClick={this.toggleHarvestCollapse}
@@ -119,16 +121,28 @@ export default class NavItem extends Component{
                 <Collapse isOpen={this.state.isHarvestCollapseOpen}>
                     <ListGroup>
                         {this.state.harvests.map(h =>
-                        <ListGroupItem
+                            
+                            <ListGroupItem
                                 onClick={()=>this.toggleFarmCollapse(h.code)}
-                                key={h.code}>Harvest code: {h.code}</ListGroupItem>)}
-                                <Collapse isOpen={this.state.isFarmCollapseOpen}>
+                                key={h.code}>Harvest code: {h.code}
+                                
+                                <Collapse isOpen={this.state.isFarmCollapseOpen && 
+                                          h.code === this.state.harvestSelected}>
                                     <ListGroup>
                                         {this.state.farms.map(f=>
-                                            <ListGroupItem key={f.code}>{f.name}</ListGroupItem>
+                                            <ListGroupItem 
+                                                key={f.code}
+                                                onClick={() => this.props.loadFields({id:f.code, name:f.name})}
+                                                >
+                                                Farm: {f.name}
+                                            </ListGroupItem>
                                         )}
                                     </ListGroup>
+                                    <Button id="add-button" onClick={this.toggleFarmModal}>
+                                        <BsPlusCircleFill size="0.8em"/>
+                                    </Button>
                                 </Collapse>
+                            </ListGroupItem>)}
                     </ListGroup>
 
                     <Button id="add-button" onClick={this.toggleHarvestModal}>

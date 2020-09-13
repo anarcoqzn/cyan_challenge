@@ -11,28 +11,30 @@ export default class Home extends Component{
     constructor(props){
         super(props);
         this.state={
-           fields:[],
-           farmSelected:null,
-           
+           farmSelected:{
+               name:null,
+               id:null
+           },  
+           fields: []
         }
-        this.loadFields = this.loadFields.bind(this)
+        this.loadFields = this.loadFields.bind(this);
     }
-    
-    loadFields(id){
-        this.setState({farmSelected:id})
-        api.get(`http://localhost:3333/api/farm/${id}`)
+
+    loadFields(farmSelected){
+        this.setState({farmSelected})
+        api.get(`http://localhost:3333/api/farm/${farmSelected.id}`)
         .then(res =>{
                 this.setState({fields:res.data.fields})
-                console.log(this.state.fields)
             }
         )
     }
-
+    
     componentDidMount(){
         const socket = socketIOClient(`http://localhost:3333/`);
         socket.on("entity-created", data => {
             toast.info(data.message)
         });
+
     }
 
     render(){
@@ -43,10 +45,9 @@ export default class Home extends Component{
                 </div>
                 <div className="map-container">
                     <FieldMap 
-                        loadFields={this.loadFields} 
-                        farmSelected={this.state.farmSelected} 
+                        farmSelected={this.state.farmSelected}
+                        loadFields={this.loadFields}
                         fields={this.state.fields}
-                    
                     />
                 </div>
             </div>

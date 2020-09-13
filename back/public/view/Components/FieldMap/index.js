@@ -4,30 +4,29 @@ import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import FieldModal from '../FieldModal'
 
 import './styles.css'
-import MillModal from "../MillModal";
 
 export default class FieldMap extends Component{
     constructor(props){
         super(props)
         
         this.state={
-            zoom:5,
+            zoom:2,
             fieldModal: {
                 isOpen: false,
                 fieldData: {
                     code: null,
-                    coordinates: null,
+                    coordinates: [],
                     farmCode: null
                 }
-            },
-
+            }
         }
         this.handleMapClick = this.handleMapClick.bind(this);
-        this.toggleFieldModal = this.toggleFieldModal.bind(this)
+        this.toggleFieldModal = this.toggleFieldModal.bind(this);
     }
+
     
     handleMapClick(e){
-        if(!this.props.farmSelected){
+        if(!this.props.farmSelected.id){
             toast.info("No farm selected")
             return;
         }
@@ -36,11 +35,11 @@ export default class FieldMap extends Component{
         const fieldData={
             coordinates:[lat,lng],
             code:null,
-            farmCode:this.props.farmSelected
+            farmCode:this.props.farmSelected.id
         }
         this.setState({ fieldModal: {
             isOpen: true,
-            fieldData
+            fieldData:fieldData
         } })
     }
     
@@ -62,13 +61,15 @@ export default class FieldMap extends Component{
         });
 
         const center = this.props.fields[0] ? this.props.fields[0].coordinates.coordinates : [0,0];
+
         return (
             <div>
-                <FieldModal 
+                <FieldModal
                     loadFields={this.props.loadFields} 
                     toggle={this.toggleFieldModal} 
                     fieldData={this.state.fieldModal.fieldData} 
-                    isOpen={this.state.fieldModal.isOpen}/>
+                    isOpen={this.state.fieldModal.isOpen}
+                    farmSelected={this.props.farmSelected}/>
                 
                 <Map
                     boundsOptions={{padding: [50, 50]}} 
