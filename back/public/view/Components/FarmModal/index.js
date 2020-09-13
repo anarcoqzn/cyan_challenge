@@ -3,8 +3,6 @@ import {Spinner, FormGroup, Label, Button, Modal, ModalHeader, ModalBody, ModalF
 import api from '../../../services/api'
 import {toast} from 'react-toastify';
 
-import "../HarvestModal/styles.css"
-
 export default class FarmModal extends Component{
     constructor(props){
         super(props)

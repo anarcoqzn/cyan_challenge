@@ -52,7 +52,7 @@ module.exports = {
             else return res.json({error:"Mill "+name+" not found."})
         }
 
-        else return res.json(await Mill.findAll({include:{association:"harvests"}}));
+        else return res.json(await Mill.findAll());
     },
 
     async findById(req, res){

@@ -60,11 +60,16 @@ export default class NavBar extends Component {
             />
 
             <HarvestModal
-            
+                loadMills={this.props.loadMills}
+                isOpen={this.state.harvestModal.isOpen}
+                toggle={this.toggleHarverstModal}
             />
             
             <FarmModal
-            
+                loadMills={this.props.loadMills}
+                loadHarvests={this.props.loadHarvests}
+                isOpen={this.state.farmModal.isOpen}
+                toggle={this.toggleFarmModal}
             />
 
             <Navbar color="faded" light>
@@ -78,11 +83,11 @@ export default class NavBar extends Component {
                     </NavItem>
 
                     <NavItem>
-                        <NavLink>Create Harvest</NavLink>
+                        <NavLink onClick={this.toggleHarverstModal}>Create Harvest</NavLink>
                     </NavItem>
 
                     <NavItem>
-                        <NavLink>Create Farm</NavLink>
+                        <NavLink onClick={this.toggleFarmModal}>Create Farm</NavLink>
                     </NavItem>
 
                     </Nav>

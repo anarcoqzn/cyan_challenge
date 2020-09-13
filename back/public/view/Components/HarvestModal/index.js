@@ -1,11 +1,11 @@
 import React,{Component} from 'react';
-import {Spinner, FormGroup, Label, Button, Modal, ModalHeader, ModalBody, ModalFooter,Form, Input } from 'reactstrap';
+import {Table, Spinner, Label, Button, Modal, ModalHeader, 
+        ModalBody, ModalFooter, Input, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import api from '../../../services/api'
 import {toast} from 'react-toastify';
 import DatePicker from 'react-datepicker'
 
 import "react-datepicker/dist/react-datepicker.css";
-import "./styles.css"
 
 export default class HarvestModal extends Component{
     constructor(props){
@@ -15,14 +15,29 @@ export default class HarvestModal extends Component{
             code:null,
             start:null,
             end:null,
-            isLoading:false
+            isLoading:false,
+            isDropDownOpwn:false,
+            mills:[],
+            selectedMill:{
+                name:"Select a mill"
+            }
         }
         
+        this.getMills = this.getMills.bind(this);
+        this.toggleDropDown = this.toggleDropDown.bind(this);
         this.handleCode = this.handleCode.bind(this);
         this.handleStartDate = this.handleStartDate.bind(this);
         this.handleEndDate = this.handleEndDate.bind(this);
         this.handleCreateharvest = this.handleCreateharvest.bind(this);
         this.enableButton = this.enableButton.bind(this);
+    }
+
+    handleSelectMill(selected){
+        this.setState({selectedMill:selected})
+    }
+
+    toggleDropDown(){
+        this.setState({isDropDownOpwn:!this.state.isDropDownOpwn})
     }
 
     handleCode(event){
@@ -42,7 +57,7 @@ export default class HarvestModal extends Component{
             code:this.state.code,
             start: this.state.start,
             end: this.state.end,
-            millId: this.props.millId
+            millId:this.state.selectedMill.id
         }
         
         const headers ={
@@ -51,9 +66,9 @@ export default class HarvestModal extends Component{
         this.setState({isLoading:true})
         api.post("http://localhost:3333/api/harvest", newHarvest, headers)
         .then(res =>{
+
             if (res.data.error) {
-                toast.error(res.data.error);
-                
+                toast.error(res.data.error); 
             }
 
             this.setState({isLoading:false});
@@ -72,43 +87,77 @@ export default class HarvestModal extends Component{
         return (this.state.code > 0 && this.state.start != null && this.state.end != null);
     }
 
+    getMills(){
+        if(this.state.mills.length === 0){
+            api.get("http://localhost:3333/api/mill")
+            .then(res =>{
+                this.setState({mills:res.data})
+        })}
+    }
+
     render(){
         return(
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
                 <ModalHeader toggle={this.props.toggle}>
                         Create a new harvest {this.state.isLoading && <Spinner color="primary" />}
-                        <p id="text">Selected mill: {this.props.millName}</p>
                 </ModalHeader>
                     <ModalBody>
-                        <Form>
-                        <FormGroup>
-                            <Label for="Code">Code</Label>
-                            <Input 
-                                onChange={this.handleCode} 
-                                type="number"
-                                name="code" 
-                                id="code"  
-                                valid={this.state.code > 0}
-                                required
-                                />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="Start">Start Date</Label>
-                            <DatePicker 
-                                selected={this.state.start}
-                                onChange={this.handleStartDate}
-                                required
-                                />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="End">End Date</Label>
-                            <DatePicker 
-                                selected={this.state.end}
-                                onChange={this.handleEndDate}
-                                required
-                                />
-                        </FormGroup>
-                        </Form>
+
+                        <Table borderless>
+                            <tbody>
+                                <tr>
+                                <td>
+                                    <Dropdown 
+                                        onClick={this.getMills} 
+                                        isOpen={this.state.isDropDownOpwn}
+                                        toggle={this.toggleDropDown}>
+
+                                        <DropdownToggle caret>{this.state.selectedMill.name}</DropdownToggle>
+                                        <DropdownMenu>
+                                            {this.state.mills.map(m =>
+                                                <DropdownItem
+                                                    onClick={()=>this.handleSelectMill(m)}
+                                                    key={m.id}
+                                                >
+                                                    {m.name}
+                                                </DropdownItem>
+                                            )}
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                </td>
+                                <td>
+                                <   Label for="Code">Code</Label>
+                                    <Input 
+                                        onChange={this.handleCode} 
+                                        type="number"
+                                        name="code" 
+                                        id="code"  
+                                        valid={this.state.code > 0}
+                                        required
+                                    />
+                                </td>
+                                </tr>
+
+                                <tr>
+                                <td>
+                                    <Label for="Start">Start Date</Label>
+                                    <DatePicker 
+                                        selected={this.state.start}
+                                        onChange={this.handleStartDate}
+                                        required
+                                    />
+                                </td>
+                                <td>
+                                    <Label for="End">End Date</Label>
+                                    <DatePicker 
+                                        selected={this.state.end}
+                                        onChange={this.handleEndDate}
+                                        required
+                                        />
+                                </td>
+                                </tr>
+                            </tbody>
+                        </Table>
                     </ModalBody>
                     <ModalFooter>
                 <Button onClick={this.handleCreateharvest} disabled={!this.enableButton()} color="primary">Create</Button>

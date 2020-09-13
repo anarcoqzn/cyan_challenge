@@ -26,21 +26,23 @@ export default class Home extends Component{
     }
 
     loadMills(params) {
-        api.get(`http://localhost:3333/api/mill${params}`)
+       api.get(`http://localhost:3333/api/mill${params}`)
         .then(res => {
             
             if(res.data.error) {toast.error(res.data.error)}
             else{
-                const harvests = res.data.harvests;
-                const allFields = [];
-                harvests.map(harvest =>
-                    harvest.farms.map(farm=>
-                        farm.fields.map(field=>
-                            allFields.push(field)
+                if(params){
+                    const harvests = res.data.harvests;
+                    const allFields = [];
+                    harvests.map(harvest =>
+                        harvest.farms.map(farm=>
+                            farm.fields.map(field=>
+                                allFields.push(field)
+                            )
                         )
                     )
-                )
-                this.setState({fields:allFields})
+                    this.setState({fields:allFields})
+                }
             }
         })
     }
@@ -51,14 +53,16 @@ export default class Home extends Component{
         .then(res => {
             if(res.data.error) {toast.error(res.data.error)}
             else{
-                const farms = res.data.farms;
-                const allFields = [];
-                farms.map(farm=>
-                    farm.fields.map(field=>
-                        allFields.push(field)
+                if(params){
+                    const farms = res.data.farms;
+                    const allFields = [];
+                    farms.map(farm=>
+                        farm.fields.map(field=>
+                            allFields.push(field)
+                        )
                     )
-                )
-                this.setState({fields:allFields})
+                    this.setState({fields:allFields})
+                }
             }
         });
     }
@@ -69,12 +73,14 @@ export default class Home extends Component{
         .then(res =>{
             if(res.data.error) {toast.error(res.data.error)}
             else{
-                this.setState({farm:res.data});
-                const fields = this.state.farm.fields;
-                console.log(this.state.farm)
-                this.setState({fields})
+                if(params){
+                    this.setState({farm:res.data});
+                    const fields = this.state.farm.fields;
+                    console.log(this.state.farm)
+                    this.setState({fields})
+                }
             }
-        })
+        });
     }
 
     loadFields(params){
@@ -99,7 +105,7 @@ export default class Home extends Component{
         return (
             <div className="app-container">
                 <div className="sidebar-container">
-                <NavBar/>
+                    <NavBar/>
                     <Sidebar 
                         loadMills={this.loadMills}
                         loadHarvests={this.loadHarvests}
