@@ -78,9 +78,11 @@ export default class Home extends Component{
 
     loadFields(params){
         
-        api.get(`http://localhost:3333/api/farm/${params}`)
+        api.get(`http://localhost:3333/api/farm${params}`)
         .then(res =>{
-                this.setState({fields:res.data.fields})
+
+            if(res.data.error) {toast.error(res.data.error)}
+            else this.setState({fields:res.data.fields})
             }
         )
     }

@@ -45,7 +45,7 @@ module.exports = {
             }
         )
 
-        if(!farm) return res.status(404).send("Farm not found")
+        if(!farm) return res.json({error:"Farm "+id+" not found"})
 
         return res.status(200).json(farm);
     }

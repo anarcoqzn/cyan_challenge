@@ -12,13 +12,7 @@ export default class Sidebar extends Component{
     super(props)
         
         this.state={
-            mills:[],
-            millSelected:"",
-            harvestSelected:null,
-            farmSelected:null,
-            tooltipOpen:false,
-            toolTipRef: React.createRef(),
-            millModal:{
+           millModal:{
                 isOpen:false,
             }
         }
@@ -75,21 +69,16 @@ export default class Sidebar extends Component{
                     <SearchByCode
                         objectName={"Farm"}
                         loadFarms={this.props.loadFarms}
+                    /> 
+                    <SearchByCode
+                        objectName={"Field"}
+                        loadFields={this.props.loadFields}
                     />
                 </ListGroup>
 
-                <span ref={this.state.toolTipRef}>
-                    <Button id="add-button" onClick={this.handleAddMillClick}>
-                        <BsPlusCircle size="2em"/>
-                    </Button>
-                <Tooltip placement="bottom" 
-                         isOpen={this.state.tooltipOpen} 
-                         target={this.state.toolTipRef}
-                         toggle={this.tooltipToggle}
-                    >
-                    Create new mill
-                </Tooltip>
-                </span>
+                <Button id="add-button" onClick={this.handleAddMillClick}>
+                    <BsPlusCircle size="2em"/>
+                </Button>
             </div>
         )
     }

@@ -52,6 +52,8 @@ module.exports = {
                 exclude:['start', 'end','createdAt', 'updatedAt','millId']
             }
         })
+
+        if(!harvest) return res.json({error:"Harvest "+id+" not found"})
         return res.json(harvest)
     }
 }
