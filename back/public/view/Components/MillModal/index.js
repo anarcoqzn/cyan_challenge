@@ -64,6 +64,7 @@ export default class MillModal extends Component{
             };
         }
     }
+    
     render(){
         return(
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
