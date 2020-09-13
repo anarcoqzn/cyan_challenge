@@ -63,7 +63,6 @@ export default class Sidebar extends Component{
         return (
             <div >
                 <MillModal
-                    loadMills={this.loadMills}
                     toggle={this.toggleMillModal}
                     isOpen={this.state.millModal.isOpen}
                 />

@@ -44,15 +44,16 @@ export default class FarmModal extends Component{
         this.setState({isLoading:true})
         api.post("http://localhost:3333/api/farm", newFarm, headers)
         .then(res =>{
-            if (res.data.error) {
-                toast.error(res.data.error)
-             
-            }
-        }
-        )
+            if (res.data.error) toast.error(res.data.error)
+        })
         .catch((err)=>{
             toast.error(err.message)
         })
+
+        this.setState({isLoading:false});
+        this.setState({code:null});
+        this.setState({name:""});
+        this.props.toggle();
     }
 
     enableButton(){
@@ -70,13 +71,6 @@ export default class FarmModal extends Component{
               return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
             };
         }
-    }
-
-    componentWillUnmount(){
-        this.setState({isLoading:false})
-        this.setState({code:null});
-        this.setState({name:''});
-        this.props.toggle();
     }
 
     render(){

@@ -35,14 +35,12 @@ export default class MillModal extends Component{
             if (res.data.error) {
                 toast.error(res.data.error);
              
-            }else{
-                this.props.loadMills();
             }
 
             this.setState({isLoading:false});
-            this.setState({name:""})
-            this.setState({isModalOpen:false})
-            return;
+            this.setState({name:""});
+            this.setState({isModalOpen:false});
+            this.props.toggle();
         }
         )
         .catch((err)=>{

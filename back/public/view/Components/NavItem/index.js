@@ -19,7 +19,9 @@ export default class NavItem extends Component{
             millSelected: null,
             harvestSelected:null,
             harvests:[],
-            isCollapseOpen:false,
+            farms:[],
+            isHarvestCollapseOpen:false,
+            isFarmCollapseOpen:false,
             farmModal:{
                 isOpen:false
             }
@@ -28,7 +30,9 @@ export default class NavItem extends Component{
         this.toggleFarmModal = this.toggleFarmModal.bind(this);
         this.loadHarvests = this.loadHarvests.bind(this);
         this.toggleHarvestModal = this.toggleHarvestModal.bind(this);
-        this.loadFarms = this.loadFarms.bind(this)
+        this.loadFarms = this.loadFarms.bind(this);
+        this.toggleHarvestCollapse = this.toggleHarvestCollapse.bind(this);
+        this.toggleFarmCollapse = this.toggleFarmCollapse.bind(this);
     }
 
     loadHarvests(id){
@@ -41,7 +45,7 @@ export default class NavItem extends Component{
                 this.toggleHarvestModal()
             )
             this.setState({harvests});
-            this.setState({isCollapseOpen:true})
+            this.setState({isHarvestCollapseOpen:true})
         });
     }
 
@@ -50,8 +54,10 @@ export default class NavItem extends Component{
         api.get(`http://localhost:3333/api/harvest/${id}`)
         .then(res =>{
             const farms = res.data.farms;
-            console.log(farms)
             if(farms.length === 0) return(this.toggleFarmModal())
+            
+            this.setState({farms})
+            this.setState({isFarmCollapseOpen:true})
         })
     }
 
@@ -71,15 +77,22 @@ export default class NavItem extends Component{
         })
     }
 
-    toggleCollapse(id){
-        if(this.state.isCollapseOpen)  {
-            this.setState({isCollapseOpen:false});
+    toggleHarvestCollapse(){
+        if(this.state.isHarvestCollapseOpen)  {
+            this.setState({isHarvestCollapseOpen:false});
+            this.setState({isFarmCollapseOpen:false})
+            this.setState({millSelected:null});
+            this.setState({harvestSelected:null});
         }
         else this.loadHarvests(this.props.millId);
     }
 
-    componentDidMount(){
-        
+    toggleFarmCollapse(hCode){
+        if(this.state.isFarmCollapseOpen)  {
+            this.setState({isFarmCollapseOpen:false});
+            this.setState({harvestSelected:null});
+        }
+        else this.loadFarms(hCode);
     }
     
     render(){
@@ -98,17 +111,24 @@ export default class NavItem extends Component{
                     harvestCode={this.state.harvestSelected}
                 />
 
-                <ListGroupItem className="item" onClick={()=>this.toggleCollapse(this.props.millId)}
+                <ListGroupItem className="item" onClick={this.toggleHarvestCollapse}
                     color="info">
                     {this.props.content}
                 </ListGroupItem>
 
-                <Collapse isOpen={this.state.isCollapseOpen}>
+                <Collapse isOpen={this.state.isHarvestCollapseOpen}>
                     <ListGroup>
                         {this.state.harvests.map(h =>
                         <ListGroupItem
-                                onClick={()=>this.loadFarms(h.code)}
+                                onClick={()=>this.toggleFarmCollapse(h.code)}
                                 key={h.code}>Harvest code: {h.code}</ListGroupItem>)}
+                                <Collapse isOpen={this.state.isFarmCollapseOpen}>
+                                    <ListGroup>
+                                        {this.state.farms.map(f=>
+                                            <ListGroupItem key={f.code}>{f.name}</ListGroupItem>
+                                        )}
+                                    </ListGroup>
+                                </Collapse>
                     </ListGroup>
 
                     <Button id="add-button" onClick={this.toggleHarvestModal}>
