@@ -20,13 +20,17 @@ module.exports = {
         if(name){
             const farm = await Farm.findOne({
                 where:{name}, 
-                include:[{model: Harvest, as:"harvest"},{model: Field, as:'fields'}]
+                include:[{model: Field, as:'fields'}],
+                attributes:{
+                    exclude:['name', 'createdAt', 'updatedAt', 'harvestCode']
+                }
             })
+
             if(farm) return res.json(farm);
-            else return res.json({error:"farm "+name+" not found"})
+            else return res.json({error:"Farm "+name+" not found"})
 
         }else{
-            return res.json(await Farm.findAll({include:{association:'harvest'}}));
+            return res.json(await Farm.findAll({include:{association:'fields'}}));
         }
     },
 

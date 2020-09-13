@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import api from '../../../services/api'
-import NavItem from '../Navitem';
 import {BsPlusCircle} from 'react-icons/bs'
 import {Button, ListGroup, Tooltip} from 'reactstrap';
+import MillModal from '../MillModal';
+import SearchByCode from '../SearchByCode';
+import SearchByName from '../SearchByName';
 
 import './styles.css'
-import MillModal from '../MillModal';
-import { toast } from 'react-toastify';
 
 export default class Sidebar extends Component{
     constructor(props){
@@ -14,7 +13,7 @@ export default class Sidebar extends Component{
         
         this.state={
             mills:[],
-            millSelected:null,
+            millSelected:"",
             harvestSelected:null,
             farmSelected:null,
             tooltipOpen:false,
@@ -27,17 +26,8 @@ export default class Sidebar extends Component{
         this.tooltipToggle = this.tooltipToggle.bind(this);
         this.handleAddMillClick = this.handleAddMillClick.bind(this);
         this.toggleMillModal = this.toggleMillModal.bind(this);
-        this.loadMills = this.loadMills.bind(this);
     }
 
-    loadMills() {
-        api.get("http://localhost:3333/api/mill")
-        .then(res => {
-            const mills = res.data;
-            this.setState({mills});
-        })
-    }
-        
     toggleMillModal(){
         this.setState({millModal:{
             isOpen:!this.state.millModal.isOpen
@@ -55,7 +45,7 @@ export default class Sidebar extends Component{
     }
 
     componentDidMount(){
-        this.loadMills();
+        
         this.tooltipToggle();
     }
     
@@ -68,13 +58,20 @@ export default class Sidebar extends Component{
                 />
 
                 <ListGroup>
-                    {this.state.mills.map(mill =>
-                        <NavItem
-                            loadFields={this.props.loadFields}
-                            key={mill.id} 
-                            millId={mill.id} 
-                            content={mill.name}/>
-                    )}
+                    <SearchByName
+                        objectName={"Mill"}
+                        loadMills={this.props.loadMills}
+                    />
+                    <SearchByName
+                        objectName={"Farm"}
+                        loadFarms={this.props.loadFarms}
+                    />
+                </ListGroup>
+                <ListGroup>
+                    <SearchByCode
+                        objectName={"Harvest"}
+                        loadHarvests={this.props.loadHarvests}
+                    />
                 </ListGroup>
 
                 <span ref={this.state.toolTipRef}>

@@ -1,3 +1,6 @@
+const Farm = require('../models/Farm');
+const Field = require('../models/Field');
+const Harvest = require('../models/Harvest');
 const Mill = require('../models/Mill');
 
 module.exports = {
@@ -18,7 +21,33 @@ module.exports = {
         const {name} = req.query;
         
         if(name) {
-            const mill = await Mill.findOne({where:{name}, include:{association:'harvests'}});
+
+            const mill = await Mill.findOne({
+                where:{name}, 
+                include:[{
+                        model: Harvest, 
+                        as:'harvests',
+                        include:[{
+                            model: Farm,
+                            as: 'farms',
+                            include:[{
+                                model: Field,
+                                as: 'fields',
+                                attributes:['code', 'coordinates']
+                            }],
+                            attributes:{
+                                exclude:['name', 'createdAt', 'updatedAt','harvestCode']
+                            }
+                        }],
+                        attributes:{
+                            exclude:['start', 'end','createdAt', 'updatedAt','millId']
+                        }
+                    }],
+                    attributes:{
+                        exclude:['createdAt', 'updatedAt', 'id','name']
+                    }
+                });
+
             if(mill) return res.json(mill);
             else return res.json({error:"Mill "+name+" not found."})
         }
@@ -28,7 +57,8 @@ module.exports = {
 
     async findById(req, res){
         const {id} = req.params;
-        
-        return res.json(await Mill.findByPk(id,{include:{association:"harvests"}}));
-    }
+        const mill = await Mill.findOne({where:{id}, include:{association:'harvests'}})
+
+        return res.json(mill)
+    },
 }
