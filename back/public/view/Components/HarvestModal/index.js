@@ -16,14 +16,12 @@ export default class HarvestModal extends Component{
             start:null,
             end:null,
             isLoading:false,
-            isDropDownOpwn:false,
-            mills:[],
+            isDropDownOpen:false,
             selectedMill:{
                 name:"Select a mill"
             }
         }
         
-        this.getMills = this.getMills.bind(this);
         this.toggleDropDown = this.toggleDropDown.bind(this);
         this.handleCode = this.handleCode.bind(this);
         this.handleStartDate = this.handleStartDate.bind(this);
@@ -37,7 +35,7 @@ export default class HarvestModal extends Component{
     }
 
     toggleDropDown(){
-        this.setState({isDropDownOpwn:!this.state.isDropDownOpwn})
+        this.setState({isDropDownOpen:!this.state.isDropDownOpen})
     }
 
     handleCode(event){
@@ -87,14 +85,6 @@ export default class HarvestModal extends Component{
         return (this.state.code > 0 && this.state.start != null && this.state.end != null);
     }
 
-    getMills(){
-        if(this.state.mills.length === 0){
-            api.get("http://localhost:3333/api/mill")
-            .then(res =>{
-                this.setState({mills:res.data})
-        })}
-    }
-
     render(){
         return(
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
@@ -108,13 +98,13 @@ export default class HarvestModal extends Component{
                                 <tr>
                                 <td>
                                     <Dropdown 
-                                        onClick={this.getMills} 
-                                        isOpen={this.state.isDropDownOpwn}
+                                        onClick={this.props.getMills} 
+                                        isOpen={this.state.isDropDownOpen}
                                         toggle={this.toggleDropDown}>
 
                                         <DropdownToggle caret>{this.state.selectedMill.name}</DropdownToggle>
                                         <DropdownMenu>
-                                            {this.state.mills.map(m =>
+                                            {this.props.mills.map(m =>
                                                 <DropdownItem
                                                     onClick={()=>this.handleSelectMill(m)}
                                                     key={m.id}
