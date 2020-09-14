@@ -1,17 +1,14 @@
-const Farm = require('../models/Farm');
-const Field = require('../models/Field');
-const Harvest = require('../models/Harvest');
-const Mill = require('../models/Mill');
+const db = require('../models/index')
 
 module.exports = {
     async register(req, res, next, io){
         
         const { name } = req.body;
-        const temp = await Mill.findOne({where:{name}});
+        const temp = await db.Mill.findOne({where:{name}});
         console.log(temp)
         if(temp) return res.json({error: "Mill already exists"});
         
-        const mill = await Mill.create({"name":name});
+        const mill = await db.Mill.create({"name":name});
         
         io.emit('entity-created', {message:`Mill created: ${name}` })
         return res.json(mill);
@@ -22,16 +19,16 @@ module.exports = {
         
         if(name) {
 
-            const mill = await Mill.findOne({
+            const mill = await db.Mill.findOne({
                 where:{name}, 
                 include:[{
-                        model: Harvest, 
+                        model: db.Harvest, 
                         as:'harvests',
                         include:[{
-                            model: Farm,
+                            model: db.Farm,
                             as: 'farms',
                             include:[{
-                                model: Field,
+                                model: db.Field,
                                 as: 'fields',
                                 attributes:['code', 'coordinates']
                             }],
@@ -52,13 +49,13 @@ module.exports = {
             else return res.json({error:"Mill "+name+" not found."})
         }
 
-        else return res.json(await Mill.findAll());
+        else return res.json(await db.Mill.findAll());
     },
 
     async findById(req, res){
         const {id} = req.params;
-        const mill = await Mill.findOne({where:{id}, include:{association:'harvests'}})
-
+        const mill = await db.Mill.findOne({where:{id}, include:{association:'harvests'}})
+        if(!mill) return res.json({error:"Mill "+id+" not found"})
         return res.json(mill)
     },
 }
