@@ -1,16 +1,14 @@
 const { Op } = require("sequelize");
-const Farm = require("../models/Farm");
-const Field = require("../models/Field");
-const Harvest = require("../models/Harvest");
+const db = require('../models/index')
 
 module.exports = {
     async register(req, res, next, io){
         
         const {millId,code, start, end} = req.body;
 
-        if(await Harvest.findByPk(code)) return res.json({error: "Harvest already exists"})
+        if(await db.Harvest.findByPk(code)) return res.json({error: "Harvest already exists"})
 
-        const harvest = await Harvest.create({code, start, end, millId});
+        const harvest = await db.Harvest.create({code, start, end, millId});
 
         io.emit('entity-created', {message:`Harvest created: ${code}` })
         return res.json(harvest);
@@ -20,16 +18,16 @@ module.exports = {
         const { start, end } = req.query;
 
         if(start && end) {
-            const harvests = await Harvest.findAll({where: {
+            const harvests = await db.Harvest.findAll({where: {
                 
                 start: {[Op.gte]:start},
                 end: {[Op.lte]:end}
                 }, 
                 include:[{
-                    model: Farm,
+                    model: db.Farm,
                     as: 'farms',
                     include:[{
-                        model:Field,
+                        model:db.Field,
                         as:'fields',
                         attributes:['code', 'coordinates']
                     }],
@@ -46,20 +44,20 @@ module.exports = {
             else return res.json(harvests);
 
         }else{
-            return res.json(await Harvest.findAll());
+            return res.json(await db.Harvest.findAll());
         }
     },
 
     async findByCode(req, res){
         const{id} = req.params;
 
-        const harvest = await Harvest.findByPk(id, 
+        const harvest = await db.Harvest.findByPk(id, 
             {
             include:[{
-                model: Farm,
+                model: db.Farm,
                 as:'farms',
                 include:[{
-                    model:Field,
+                    model:db.Field,
                     as:'fields',
                     attributes:['code', 'coordinates']
                 }],

@@ -1,18 +1,12 @@
-const {Model, DataTypes} = require('sequelize');
+module.exports = (sequelize, DataTypes) =>{
+    const Field  = sequelize.define("Field",{
+        code: {type: DataTypes.INTEGER, primaryKey: true},
+        coordinates: DataTypes.GEOMETRY('Point')
+    },{})
 
-class Field extends Model {
-    static init(connection){
-        super.init({
-            code: {type: DataTypes.INTEGER, primaryKey: true},
-            coordinates: DataTypes.GEOMETRY('Point')
-        },
-        {
-            sequelize: connection
-        })
+    Field.associate = function(models){
+        this.belongsTo(models.Farm, { foreignKey: "farmCode", as:"farm"});
     }
-    static associate(models){
-        this.belongsTo(models.Farm, { foreignKey: "farmCode", as: "farm"});
-    }
+
+    return Field
 }
-
-module.exports = Field;

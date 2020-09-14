@@ -6,7 +6,7 @@ const Farm = require('../../models/Farm');
 const Harvest = require('../../models/Harvest');
 const Mill = require('../../models/Mill');
 
-const connection = new Sequelize(dbConfig);
+const connection = new Sequelize(dbConfig.development);
 
 Field.init(connection);
 Farm.init(connection);

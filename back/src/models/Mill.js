@@ -1,20 +1,11 @@
-const {Model, DataTypes} = require('sequelize');
+module.exports = (sequelize, DataTypes) =>{
+    const Mill  = sequelize.define("Mill",{
+        name: {type: DataTypes.STRING}
+    },{});
 
-class Mill extends Model{
-    static init(connection){
-        super.init({
-            name: {type: DataTypes.STRING}
-        },
-        {
-            sequelize : connection
-        })
+    Mill.associate = function(models){
+        this.hasMany(models.Harvest,{foreignKey : "millId",as: "harvests"});
     }
 
-    static associate(models){
-       this.hasMany(models.Harvest,{
-            foreignKey:"millId",
-            as:"harvests"
-        })
-    }
+    return Mill
 }
-module.exports = Mill;
